@@ -11,8 +11,11 @@ Armas
 Enemigos
 Gravedad
 
-  -Escenas/Niveles:
+  -Escenas/Niveles(10):
+glaciar de Marte.
 Superficie de Marte.
+caverna de marte.
+volcanes de marte.
 
   -Historia/Objetivos:
 Su nave se estrella en Marte y acaba en un crater
