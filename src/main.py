@@ -508,7 +508,14 @@ class GameView(arcade.View):
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
         else:
             self.player_sprite.change_x = 0
-
+    
+    def on_mouse_press(self, x, y, button, modifiers):
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            self.shoot_pressed = True
+    def on_mouse_release(self, x, y, button, modifiers):
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            self.shoot_pressed = False
+    
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
@@ -516,16 +523,15 @@ class GameView(arcade.View):
             self.setup()
 
         if key == arcade.key.UP or key == arcade.key.W:
-            self.up_pressed = True
+            self.angulo_disparo+=1#Falta angulo de disparo
         elif key == arcade.key.DOWN or key == arcade.key.S:
-            self.down_pressed = True
+            self.angulo_disparo-=1#Falta angulo de disparo
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.left_pressed = True
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.right_pressed = True
-
-        if key == arcade.key.Q:
-            self.shoot_pressed = True
+        elif key ==arcade.key.SPACE:
+            self.up_pressed = True
 
         self.process_keychange()
 
@@ -536,13 +542,8 @@ class GameView(arcade.View):
             self.left_pressed = False
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.right_pressed = False
-        elif key == arcade.key.UP or key == arcade.key.W:
+        elif key ==arcade.key.SPACE:
             self.up_pressed = False
-        elif key == arcade.key.DOWN or key == arcade.key.S:
-            self.down_pressed = False
-
-        if key == arcade.key.Q:
-            self.shoot_pressed = False
 
         self.process_keychange()
 
@@ -587,5 +588,4 @@ if __name__ == "__main__":
     filetest = PROJECT_ROOT / "assets" / "dialogs.txt"
     print(f"Test file size: {filetest.stat().st_size} bytes")
     
-
     main()
