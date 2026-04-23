@@ -17,11 +17,15 @@ class VistaNiveles(arcade.View):
         self.boton_nivel4 = arcade.Sprite("assets/images/menu/nivel/Botón_nivel4_menu.png", scale = 1.8)
         self.boton_nivel5 = arcade.Sprite("assets/images/menu/nivel/Botón_nivel5_menu.png", scale = 1.8)
 
+        self.boton_atras = arcade.Sprite("assets/images/menu/nivel/flecha_atras_menu.png", scale = 1.8)
+
+
         self.lista_botones.append(self.boton_nivel1)
         self.lista_botones.append(self.boton_nivel2)
         self.lista_botones.append(self.boton_nivel3)
         self.lista_botones.append(self.boton_nivel4)
         self.lista_botones.append(self.boton_nivel5)
+        self.lista_botones.append(self.boton_atras)
         
     def on_show_view(self):
         centro_x = self.window.width / 2
@@ -40,6 +44,9 @@ class VistaNiveles(arcade.View):
 
         self.boton_nivel5.center_x = centro_x
         self.boton_nivel5.center_y = 90
+
+        self.boton_atras.center_x = 50
+        self.boton_atras.center_y = 550
     
     def on_draw(self):
         self.clear()
@@ -48,6 +55,21 @@ class VistaNiveles(arcade.View):
 
         self.lista_botones.draw()
 
+    def on_mouse_press(self, x, y, button, modifiers):
+        """
+        Lógica para detectar clics y cambiar de vista
+        """
+        botones_pulsados = arcade.get_sprites_at_point((x, y), self.lista_botones)
+
+        if len(botones_pulsados) > 0:
+            boton_clicado = botones_pulsados[0]
+
+            if boton_clicado == self.boton_atras:
+                from MainMenu import MainMenu
+                proxima_vista = MainMenu()
+                self.window.show_view(proxima_vista)
+            
+    
     def on_mouse_motion(self, x, y, dx, dy):
         """
         Función para añadir efectos cuando se pasa la flecha del ratón por encima de los botones
