@@ -1,6 +1,7 @@
 import arcade
 
 from niveles import VistaNiveles
+from ajustes import VistaAjustes
 
 class MainMenu(arcade.View):
     def __init__(self):
@@ -59,8 +60,9 @@ class MainMenu(arcade.View):
             if boton_clicado == self.boton_nivel:
                 proxima_vista = VistaNiveles()
                 self.window.show_view(proxima_vista)
-            #elif boton_clicado == self.boton_ajustes:
-                #Nueva vista
+            elif boton_clicado == self.boton_ajustes:
+                proxima_vista = VistaAjustes()
+                self.window.show_view(proxima_vista)
             elif boton_clicado == self.boton_salir:
                 arcade.exit()
 
