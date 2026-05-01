@@ -193,6 +193,8 @@ class GameView(arcade.View):
         self.up_pressed = False
         self.down_pressed = False
         self.shoot_pressed = False
+        self.velocidad_bala_x= 12
+        self.velocidad_bala_y= 0
 
         # Variable to hold our texture for our player
         self.player_texture = None
@@ -376,9 +378,11 @@ class GameView(arcade.View):
                     scaling=0.8,
                 )
                 if self.player_sprite.facing_direction == RIGHT_FACING:
-                    bullet.change_x = 12
+                    bullet.change_x = self.velocidad_bala_x
+                    bullet.change_y = self.velocidad_bala_y
                 else:
-                    bullet.change_x = -12
+                    bullet.change_x = -self.velocidad_bala_x
+                    bullet.change_y = self.velocidad_bala_y
 
                 bullet.center_x = self.player_sprite.center_x
                 bullet.center_y = self.player_sprite.center_y
@@ -508,6 +512,7 @@ class GameView(arcade.View):
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
         else:
             self.player_sprite.change_x = 0
+
     
     def on_mouse_press(self, x, y, button, modifiers):
         if button == arcade.MOUSE_BUTTON_LEFT:
@@ -523,9 +528,23 @@ class GameView(arcade.View):
             self.setup()
 
         if key == arcade.key.UP or key == arcade.key.W:
-            self.angulo_disparo+=1#Falta angulo de disparo
+            if self.velocidad_bala_x ==0 and self.velocidad_bala_y == 12:
+                return
+            elif self.velocidad_bala_y >= 0:
+                self.velocidad_bala_x -= 6
+                self.velocidad_bala_y += 6
+            else:
+                self.velocidad_bala_x += 6
+                self.velocidad_bala_y += 6
         elif key == arcade.key.DOWN or key == arcade.key.S:
-            self.angulo_disparo-=1#Falta angulo de disparo
+            if self.velocidad_bala_x ==0 and self.velocidad_bala_y == -12:
+                return
+            elif self.velocidad_bala_y >= 0:
+                self.velocidad_bala_x += 6
+                self.velocidad_bala_y -= 6
+            else:
+                self.velocidad_bala_x -= 6
+                self.velocidad_bala_y -= 6
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.left_pressed = True
         elif key == arcade.key.RIGHT or key == arcade.key.D:
