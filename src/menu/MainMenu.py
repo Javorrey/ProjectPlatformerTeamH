@@ -1,6 +1,7 @@
 import arcade
 
 from niveles import VistaNiveles
+from ajustes import VistaAjustes
 
 class MainMenu(arcade.View):
     def __init__(self):
@@ -25,18 +26,19 @@ class MainMenu(arcade.View):
 
     def on_show_view(self):
         centro_x = self.window.width / 2
+        alto = self.window.height
 
         self.boton_jugar.center_x = centro_x
-        self.boton_jugar.center_y = 340
+        self.boton_jugar.center_y = alto * (340/600)
 
         self.boton_nivel.center_x = centro_x
-        self.boton_nivel.center_y = 270
+        self.boton_nivel.center_y = alto * (270/600)
 
         self.boton_ajustes.center_x = centro_x
-        self.boton_ajustes.center_y = 200
+        self.boton_ajustes.center_y = alto * (200/600)
 
         self.boton_salir.center_x = centro_x
-        self.boton_salir.center_y = 130
+        self.boton_salir.center_y = alto * (130/600)
 
     def on_draw(self):
         self.clear()
@@ -59,8 +61,9 @@ class MainMenu(arcade.View):
             if boton_clicado == self.boton_nivel:
                 proxima_vista = VistaNiveles()
                 self.window.show_view(proxima_vista)
-            #elif boton_clicado == self.boton_ajustes:
-                #Nueva vista
+            elif boton_clicado == self.boton_ajustes:
+                proxima_vista = VistaAjustes()
+                self.window.show_view(proxima_vista)
             elif boton_clicado == self.boton_salir:
                 arcade.exit()
 
