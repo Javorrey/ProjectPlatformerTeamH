@@ -15,7 +15,7 @@ WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Platformer"
 
 # Constants used to scale our sprites from their original size
-TILE_SCALING = 0.5
+TILE_SCALING = 1
 COIN_SCALING = 0.5
 
 # Movement speed of player, in pixels per frame
@@ -26,6 +26,10 @@ PLAYER_JUMP_SPEED = 20
 # Constants used to track the direction a character is facing
 RIGHT_FACING = 0
 LEFT_FACING = 1
+
+CURRENT_MAP="nivel-prueba.tmj"
+BASE_DIR= Path(__file__).resolve().parent.parent
+MAP_FILE= BASE_DIR / "assets" /"maps" / CURRENT_MAP
 
 class Character(arcade.Sprite):
     def __init__(self, name_folder, name_file):
@@ -243,7 +247,7 @@ class GameView(arcade.View):
             "Platforms": {
                 "use_spatial_hash": True
             },
-            "Moving Platforms": {
+            "Moving_Platforms": {
                 "use_spatial_hash": False
             },
             "Ladders": {
@@ -253,7 +257,7 @@ class GameView(arcade.View):
 
         # Load our TileMap
         self.tile_map = arcade.load_tilemap(
-            ":resources:tiled_maps/map_with_ladders.json",
+            MAP_FILE,
             scaling=TILE_SCALING,
             layer_options=layer_options,
         )
@@ -300,12 +304,13 @@ class GameView(arcade.View):
         # platforms parameter that is intended for moving platforms.
         # If a platform is supposed to move, and is added to the walls list,
         # it will not be moved.
+        self.mis_paredes= [self.scene["walls"], self.scene["Platforms"]]
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
-            walls=self.scene["Platforms"],
+            walls=self.mis_paredes,
             gravity_constant=GRAVITY,
-            platforms=self.scene["Moving Platforms"],
-            ladders=self.scene["Ladders"]
+            platforms=self.scene["Moving_Platforms"],
+            
         )
 
         # Initialize our camera, setting a viewport the size of our window.
@@ -326,7 +331,7 @@ class GameView(arcade.View):
         # Initialize our arcade.Text object for score
         self.score_text = arcade.Text(f"Score: {self.score}", x=0, y=5)
 
-        self.background_color = arcade.csscolor.CORNFLOWER_BLUE
+        #self.background_color = arcade.csscolor.CORNFLOWER_BLUE
 
         # Calculate the right edge of the map in pixels
         self.end_of_map = (self.tile_map.width * self.tile_map.tile_width)
@@ -402,7 +407,7 @@ class GameView(arcade.View):
         self.scene.update_animation(
             delta_time,
             [
-                "Coins",
+               
                 "Background",
                 "Player",
                 "Enemies"
@@ -423,8 +428,9 @@ class GameView(arcade.View):
                 bullet,
                 [
                     self.scene["Enemies"],
+                    self.scene["walls"],
                     self.scene["Platforms"],
-                    self.scene["Moving Platforms"]
+                    self.scene["Moving_Platforms"]
                 ]
             )
 
@@ -452,13 +458,14 @@ class GameView(arcade.View):
         player_collision_list = arcade.check_for_collision_with_lists(
             self.player_sprite,
             [
-                self.scene["Coins"],
+                
+                self.scene["Daño"],
                 self.scene["Enemies"]
             ]
         )
 
         for collision in player_collision_list:
-            if self.scene["Enemies"] in collision.sprite_lists:
+            if self.scene["Enemies"] in collision.sprite_lists or self.scene["Daño"] in collision.sprite_lists:
                 arcade.play_sound(self.gameover_sound)
                 game_over = GameOverView()
                 self.window.show_view(game_over)
