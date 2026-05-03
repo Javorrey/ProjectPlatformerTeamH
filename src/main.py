@@ -476,9 +476,20 @@ class GameView(arcade.View):
                 arcade.play_sound(self.collect_coin_sound)
                 self.score += 75
                 self.score_text.text = f"Score: {self.score}"
+        #metodo que centra la camara en base a la posicion del player
+        self.center_camera_to_player()
 
-        # Center our camera on the player
-        self.camera.position = self.player_sprite.position
+
+    def center_camera_to_player(self):
+        #si pos x es menor que la mitad del ancho , no se mueve
+        if self.player_sprite.center_x<= WINDOW_WIDTH//2:
+            return
+        #si pos x es mayor que la pos x fin de mapa - la mitad del ancho tampoco 
+        if self.player_sprite.center_x>=(self.end_of_map-WINDOW_WIDTH//2) :
+            return
+        #en cualquier otro caso la cam sigue al player , su pos y es fija
+        else:
+            self.camera.position=(self.player_sprite.center_x, WINDOW_HEIGHT//2)   
 
     def process_keychange(self):
         # First handle the case where we have moved up. This needs to be handled
