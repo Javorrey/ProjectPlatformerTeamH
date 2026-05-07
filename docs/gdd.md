@@ -11,7 +11,7 @@ Armas
 Enemigos
 Gravedad
 
-  -Escenas/Niveles(10):
+  -Escenas/Niveles(5):
 glaciar de Marte.
 Superficie de Marte.
 caverna de marte.
