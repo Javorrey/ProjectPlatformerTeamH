@@ -3,13 +3,13 @@ import arcade
 class VistaAjustes(arcade.View):
     def __init__(self):
         """
-        Cargamos todas las imágenes.
+        Inicializamos la vista y cargamos todos los recursos
         """
         super().__init__()
 
-        arcade.load_font("assets/fonts/fuente_ajustes_menu.ttf")
+        arcade.load_font("assets/fonts/fuente_menu.ttf")
         
-        self.fondo = arcade.load_texture("assets/images/menu/ajustes/Fondo_menu.png")
+        self.fondo = arcade.load_texture("assets/images/menu/ajustes/fondo_menu.png")
         self.icono_sonido = arcade.load_texture("assets/images/menu/ajustes/icono_sonido_menu.png")
         self.icono_pantalla = arcade.load_texture("assets/images/menu/ajustes/icono_pantalla_menu.png")
 
@@ -65,7 +65,7 @@ class VistaAjustes(arcade.View):
         ancho_relleno_slider = self.slider_ancho * self.volumen_musica
 
         #Dibujo
-        arcade.draw_text("AJUSTES DE SONIDO", texto_ajustes_de_sonido_x, texto_ajustes_de_sonido_y, color=arcade.color.ORANGE_PEEL, font_size=27, font_name="Upheaval TT (BRK)", anchor_x="center")
+        arcade.draw_text("AJUSTES DE SONIDO:", texto_ajustes_de_sonido_x, texto_ajustes_de_sonido_y, color=arcade.color.ORANGE_PEEL, font_size=27, font_name="Upheaval TT (BRK)", anchor_x="center")
         arcade.draw_texture_rect(self.icono_sonido, arcade.XYWH(icono_sonido_x, icono_sonido_y, 50, 50))
 
         arcade.draw_text("Música:", texto_musica_x, texto_musica_y, color=arcade.color.WHITE, font_size=20, font_name="Upheaval TT (BRK)", anchor_x="center")
@@ -95,7 +95,7 @@ class VistaAjustes(arcade.View):
             color_fondo = arcade.color.DARK_GRAY   
         
         #Dibujo
-        arcade.draw_text("AJUSTES DE PANTALLA", texto_ajustes_de_pantalla_x, texto_ajustes_de_pantalla_y, color=arcade.color.ORANGE_PEEL, font_size=27, font_name="Upheaval TT (BRK)", anchor_x="center")
+        arcade.draw_text("AJUSTES DE PANTALLA:", texto_ajustes_de_pantalla_x, texto_ajustes_de_pantalla_y, color=arcade.color.ORANGE_PEEL, font_size=27, font_name="Upheaval TT (BRK)", anchor_x="center")
         arcade.draw_texture_rect(self.icono_pantalla, arcade.XYWH(icono_pantalla_x, icono_pantalla_y, 32, 32))
         
         arcade.draw_text("Pantalla completa:", texto_pantalla_completa_x, texto_pantalla_completa_y, color=arcade.color.WHITE, font_size=20, font_name="Upheaval TT (BRK)", anchor_x="left", anchor_y="center")
@@ -122,8 +122,8 @@ class VistaAjustes(arcade.View):
             boton_clicado = botones_pulsados[0]
 
             if boton_clicado == self.boton_atras:
-                from MainMenu import MainMenu
-                proxima_vista = MainMenu()
+                from mainMenu import mainMenu
+                proxima_vista = mainMenu()
                 self.window.show_view(proxima_vista)
 
         #LÓGICA DEL SLIDER

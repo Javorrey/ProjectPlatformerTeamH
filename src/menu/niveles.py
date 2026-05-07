@@ -3,19 +3,19 @@ import arcade
 class VistaNiveles(arcade.View):
     def __init__(self):
         """
-        Cargamos todas las imágenes.
+        Inicializamos la vista y cargamos todos los recursos
         """
         super().__init__()
 
-        self.fondo = arcade.load_texture("assets/images/menu/nivel/Fondo_menu.png")
+        self.fondo = arcade.load_texture("assets/images/menu/nivel/fondo_menu.png")
 
         self.lista_botones = arcade.SpriteList()
         
-        self.boton_nivel1 = arcade.Sprite("assets/images/menu/nivel/Botón_nivel1_menu.png", scale = 1.8)
-        self.boton_nivel2 = arcade.Sprite("assets/images/menu/nivel/Botón_nivel2_menu.png", scale = 1.8)
-        self.boton_nivel3 = arcade.Sprite("assets/images/menu/nivel/Botón_nivel3_menu.png", scale = 1.8)
-        self.boton_nivel4 = arcade.Sprite("assets/images/menu/nivel/Botón_nivel4_menu.png", scale = 1.8)
-        self.boton_nivel5 = arcade.Sprite("assets/images/menu/nivel/Botón_nivel5_menu.png", scale = 1.8)
+        self.boton_nivel1 = arcade.Sprite("assets/images/menu/nivel/boton_nivel1_menu.png", scale = 1.8)
+        self.boton_nivel2 = arcade.Sprite("assets/images/menu/nivel/boton_nivel2_menu.png", scale = 1.8)
+        self.boton_nivel3 = arcade.Sprite("assets/images/menu/nivel/boton_nivel3_menu.png", scale = 1.8)
+        self.boton_nivel4 = arcade.Sprite("assets/images/menu/nivel/boton_nivel4_menu.png", scale = 1.8)
+        self.boton_nivel5 = arcade.Sprite("assets/images/menu/nivel/boton_nivel5_menu.png", scale = 1.8)
 
         self.boton_atras = arcade.Sprite("assets/images/menu/nivel/flecha_atras_menu.png", scale = 1.8)
 
@@ -65,9 +65,24 @@ class VistaNiveles(arcade.View):
         if len(botones_pulsados) > 0:
             boton_clicado = botones_pulsados[0]
 
-            if boton_clicado == self.boton_atras:
-                from MainMenu import MainMenu
-                proxima_vista = MainMenu()
+            if boton_clicado == self.boton_nivel1:
+                self.window.nivel_seleccionado = 1
+
+            elif boton_clicado == self.boton_nivel2:
+                self.window.nivel_seleccionado = 2
+
+            elif boton_clicado == self.boton_nivel3:
+                self.window.nivel_seleccionado = 3
+
+            elif boton_clicado == self.boton_nivel4:
+                self.window.nivel_seleccionado = 4
+
+            elif boton_clicado == self.boton_nivel5:
+                self.window.nivel_seleccionado = 5
+
+            elif boton_clicado == self.boton_atras:
+                from mainMenu import mainMenu
+                proxima_vista = mainMenu()
                 self.window.show_view(proxima_vista)
             
     
