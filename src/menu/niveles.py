@@ -81,8 +81,7 @@ class VistaNiveles(arcade.View):
                 self.window.nivel_seleccionado = 5
 
             elif boton_clicado == self.boton_atras:
-                from mainMenu import mainMenu
-                proxima_vista = mainMenu()
+                proxima_vista = self.window.MainMenuClass()
                 self.window.show_view(proxima_vista)
             
     

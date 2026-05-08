@@ -118,6 +118,9 @@ class mainMenu(arcade.View):
 
 if __name__ == '__main__':
     ventana = arcade.Window(800, 600, "Artemis 67")
+    
+    #Registramos la ventana
+    ventana.MainMenuClass = mainMenu
 
     ventana.nivel_seleccionado = 1
     

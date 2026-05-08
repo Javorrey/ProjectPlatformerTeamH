@@ -122,8 +122,7 @@ class VistaAjustes(arcade.View):
             boton_clicado = botones_pulsados[0]
 
             if boton_clicado == self.boton_atras:
-                from mainMenu import mainMenu
-                proxima_vista = mainMenu()
+                proxima_vista = self.window.MainMenuClass()
                 self.window.show_view(proxima_vista)
 
         #LÓGICA DEL SLIDER
