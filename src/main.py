@@ -253,6 +253,7 @@ class GameView(arcade.View):
         self.player_sprite.is_on_ground = self.physics_engine.can_jump()
 
         self.player_sprite.change_y_aim = self.velocidad_bala_y
+        self.player_sprite.change_x_aim = self.velocidad_bala_x 
 
         # ---------------- LOGICA DE DISPARO NORMAL ----------------
         if self.can_shoot:
