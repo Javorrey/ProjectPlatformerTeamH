@@ -25,3 +25,9 @@ MAP_FILE = BASE_DIR / "assets" / "maps" / CURRENT_MAP
 #Astronaut's constants
 CHARACTER_SCALING = 1.5
 ASTRONAUT_PATH = BASE_DIR / "assets" / "sprites" / "astronaut"
+
+#Zombie Constants
+ZOMBIE_PATH = BASE_DIR / "assets" / "sprites" / "zombie"
+
+#Alien Constants
+ALIEN_PATH = BASE_DIR / "assets" / "sprites" / "brain_alien"

@@ -83,14 +83,14 @@ class PlayerCharacter(arcade.Sprite):
         WIDTH = 64
         HEIGHT = 64
 
-        # Caminar: 4 frames en cuadrícula 2x2
+        # Astronauta: Caminar: 4 frames en cuadrícula 2x2
         self.walk_forward, self.walk_forward_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_forward_3.0.png"), 4, WIDTH, HEIGHT, 2)
         self.walk_up, self.walk_up_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_up_3.0.png"), 4, WIDTH, HEIGHT, 2)
         self.walk_down, self.walk_down_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_down_3.0.png"), 4, WIDTH, HEIGHT, 2)
         self.walk_forward_up, self.walk_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_forward_up_2.0.png"), 4, WIDTH, HEIGHT, 2)
         self.walk_forward_down, self.walk_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_forward_down_2.0.png"), 4, WIDTH, HEIGHT, 2)
 
-        # Saltar: 1 solo frame
+        #Astronauta: Saltar: 1 solo frame
         self.jump_forward, self.jump_forward_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_jump_forward_3.0.png"), 1, WIDTH, HEIGHT, 1)
         self.jump_up, self.jump_up_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_jump_up_3.0.png"), 1, WIDTH, HEIGHT, 1)
         self.jump_down, self.jump_down_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_jump_down_2.0.png"), 1, WIDTH, HEIGHT, 1)
@@ -175,6 +175,10 @@ class Enemy(Character):
     def __init__(self, name_folder, name_file):
         super().__init__(name_folder, name_file)
 
+        #Cada frame es de 64x64
+        WIDTH = 64
+        HEIGHT = 64
+
         self.should_update_walk = 0
 
     def update_animation(self, delta_time):
@@ -212,3 +216,10 @@ class ZombieEnemy(Enemy):
     def __init__(self):
         super().__init__("zombie", "zombie")
         self.health = 50
+
+        ruta_base = ZOMBIE_PATH
+
+        #Zombie: Caminar
+        self.zombie_walk_forward, self.zombie_walk_forward_flipped = load_spritesheet_pair(str(ruta_base / "zombie_walk_forward_2.0.png"), 1,WIDTH, HEIGHT, 1)
+        self.zombie_jump_forward_up, self.zombie_jump_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "zombie_jump_forward_up_2.0.png"), 1,WIDTH, HEIGHT, 1)
+        self.zombie_jump_forward_down, self.zombie_jump_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "zombie_jump_forward_down_2.0.png"), 1,WIDTH, HEIGHT, 1)
