@@ -48,3 +48,4 @@ class ProyectilExplosivo(ProyectilBase):
             1.2, 
             50
         )
+        self.radio_explosion = 150
