@@ -105,6 +105,8 @@ class GameView(arcade.View):
         self.shoot_sound = arcade.load_sound(":resources:sounds/hurt5.wav")
         self.hit_sound = arcade.load_sound(":resources:sounds/hit5.wav")
 
+        self.physics_engine = None 
+
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
         layer_options = {
@@ -204,7 +206,10 @@ class GameView(arcade.View):
         # Add an empty bullet SpriteList to our scene
         self.scene.add_sprite_list("Bullets")
 
-        self.window.background_color = self.tile_map.background_color
+        if self.tile_map.background_color:
+            self.window.background_color = self.tile_map.background_color
+        else:
+            self.window.background_color = arcade.color.CORNFLOWER_BLUE
 
     def on_show_view(self):
         self.setup()
@@ -212,9 +217,12 @@ class GameView(arcade.View):
     def on_draw(self):
         """Render the screen."""
 
+        if not self.camera:
+            return
+
         # Clear the screen to the background color
         self.clear()
-
+     
         # Activate our camera before drawing
         self.camera.use()
 
@@ -230,6 +238,9 @@ class GameView(arcade.View):
     def on_update(self, delta_time):
         """Movement and Game Logic"""
 
+        if not self.physics_engine:
+            return
+
         # Move the player using our physics engine
         self.physics_engine.update()
 
@@ -238,6 +249,10 @@ class GameView(arcade.View):
             self.player_sprite.climbing = True
         else:
             self.player_sprite.climbing = False
+
+        self.player_sprite.is_on_ground = self.physics_engine.can_jump()
+
+        self.player_sprite.change_y_aim = self.velocidad_bala_y
 
         # ---------------- LOGICA DE DISPARO NORMAL ----------------
         if self.can_shoot:

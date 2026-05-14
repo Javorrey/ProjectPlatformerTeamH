@@ -1,4 +1,5 @@
 from pathlib import Path
+
 # Constants
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -17,6 +18,10 @@ PLAYER_JUMP_SPEED = 20
 RIGHT_FACING = 0
 LEFT_FACING = 1
 
-CURRENT_MAP="nivel-prueba.tmj"
-BASE_DIR= Path(__file__).resolve().parent.parent
-MAP_FILE= BASE_DIR / "assets" /"maps" / CURRENT_MAP
+CURRENT_MAP = "nivel-prueba.tmj"
+BASE_DIR = Path(__file__).resolve().parent.parent
+MAP_FILE = BASE_DIR / "assets" / "maps" / CURRENT_MAP
+
+#Astronaut's constants
+CHARACTER_SCALING = 1.5
+ASTRONAUT_PATH = BASE_DIR / "assets" / "sprites" / "astronaut"

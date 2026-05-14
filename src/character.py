@@ -1,9 +1,34 @@
-
 import math
 from pathlib import Path
 import arcade
 from constants import *
+from PIL import Image
 
+#Constantes de dirección vertical
+FACE_UP = 0
+FACE_FORWARD = 1
+FACE_DOWN = 2
+
+UPDATES_PER_FRAME = 7
+
+def load_spritesheet_pair(path: str, frame_count: int, frame_w: int, frame_h: int, cols: int):
+    frames_normales = []
+    frames_volteados = []
+    imagen_completa = Image.open(path)
+    
+    for i in range(frame_count):
+        fila = i // cols
+        columna = i % cols
+        left   = columna * frame_w
+        top    = fila * frame_h
+        right  = left + frame_w
+        bottom = top + frame_h
+        recorte = imagen_completa.crop((left, top, right, bottom))
+        textura = arcade.Texture(recorte)
+        frames_normales.append(textura)
+        frames_volteados.append(textura.flip_left_right())
+
+    return frames_normales, frames_volteados
 
 class Character(arcade.Sprite):
     def __init__(self, name_folder, name_file):
@@ -38,59 +63,113 @@ class Character(arcade.Sprite):
         self.texture = self.idle_texture_pair[0]
 
 
-class PlayerCharacter(Character):
+class PlayerCharacter(arcade.Sprite):
+    """Jugador astronauta"""
     def __init__(self):
-        super().__init__("female_adventurer", "femaleAdventurer")
+        super().__init__()
 
-        # Track extra state related to the player. We will use these for change
-        # textures in animations
+        self.facing_direction = RIGHT_FACING
+        self.vertical_facing = FACE_FORWARD
         self.climbing = False
-        self.should_update_walk = 0
+        self.is_on_ground = True
+        self.cur_texture = 0
+        self.scale = CHARACTER_SCALING
+
+        ruta_base = ASTRONAUT_PATH
+        
+        self.change_y_aim = 0
+
+        #Cada frame es de 64x64
+        WIDTH = 64
+        HEIGHT = 64
+
+        # Caminar: 4 frames en cuadrícula 2x2
+        self.walk_forward, self.walk_forward_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_forward_3.0.png"), 4, WIDTH, HEIGHT, 2)
+        self.walk_up, self.walk_up_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_up_3.0.png"), 4, WIDTH, HEIGHT, 2)
+        self.walk_down, self.walk_down_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_down_3.0.png"), 4, WIDTH, HEIGHT, 2)
+        self.walk_forward_up, self.walk_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_forward_up_2.0.png"), 4, WIDTH, HEIGHT, 2)
+        self.walk_forward_down, self.walk_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_walk_forward_down_2.0.png"), 4, WIDTH, HEIGHT, 2)
+
+        # Saltar: 1 solo frame
+        self.jump_forward, self.jump_forward_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_jump_forward_3.0.png"), 1, WIDTH, HEIGHT, 1)
+        self.jump_up, self.jump_up_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_jump_up_3.0.png"), 1, WIDTH, HEIGHT, 1)
+        self.jump_down, self.jump_down_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_jump_down_2.0.png"), 1, WIDTH, HEIGHT, 1)
+        self.jump_forward_up, self.jump_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_jump_forward_up_2.0.png"), 1, WIDTH, HEIGHT, 1)
+        self.jump_forward_down, self.jump_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "astronaut_jump_forward_down_2.0.png"), 1, WIDTH, HEIGHT, 1)
+        
+        #Textura del astronauta por defecto
+        self.texture = self.walk_forward[1]
 
     def update_animation(self, delta_time):
-
-        # Figure out the direction the character is facing based on the movement
-        # and previous direction.
+        #Dirección horizontal
         if self.change_x < 0 and self.facing_direction == RIGHT_FACING:
             self.facing_direction = LEFT_FACING
         elif self.change_x > 0 and self.facing_direction == LEFT_FACING:
             self.facing_direction = RIGHT_FACING
 
-        # Handle animations for climbing on ladders. We use the absolute value
-        # of change_y here because we don't care if the character is moving up
-        # or down, the animation stays the same.
-        if self.climbing and abs(self.change_y) > 1:
-            self.cur_texture += 1
-            if self.cur_texture > 7:
-                self.cur_texture = 0
-        if self.climbing:
-            self.texture = self.climbing_textures[self.cur_texture // 4]
-            return
+        #Dirección vertical
+        if self.change_y_aim > 0:
+            self.vertical_facing = FACE_UP
+        elif self.change_y_aim < 0:
+            self.vertical_facing = FACE_DOWN
+        else:
+            self.vertical_facing = FACE_FORWARD
 
-        # Handling jumping animations
-        if self.change_y > 0 and not self.climbing:
-            self.texture = self.jump_texture_pair[self.facing_direction]
-            return
-        elif self.change_y < 0 and not self.climbing:
-            self.texture = self.fall_texture_pair[self.facing_direction]
-            return
+        #Variables auxiliares para facilitar la lectura
+        mirando_izquierda = self.facing_direction == LEFT_FACING
+        esta_moviendose = self.change_x != 0
 
-        # Handle idle animations
-        if self.change_x == 0:
-            self.texture = self.idle_texture_pair[self.facing_direction]
-            return
+        #Elegir animación correcta
+        if not self.is_on_ground:
+            
+            # Animaciones de salto
+            if self.vertical_facing == FACE_UP:
+                if mirando_izquierda:
+                    texturas = self.jump_forward_up_flipped
+                else:
+                    texturas = self.jump_forward_up
+            elif self.vertical_facing == FACE_DOWN:
+                if mirando_izquierda:
+                    texturas = self.jump_forward_down_flipped
+                else:
+                    texturas = self.jump_forward_down
+            else:
+                if mirando_izquierda:
+                    texturas = self.jump_forward_flipped
+                else:
+                    texturas = self.jump_forward
+        else:
+            
+           # Animaciones de caminar o quieto
+            if self.vertical_facing == FACE_UP:
+                if esta_moviendose:
+                    texturas = self.walk_forward_up_flipped if mirando_izquierda else self.walk_forward_up
+                else:
+                    self.cur_texture = 0
+                    self.texture = self.walk_up_flipped[0] if mirando_izquierda else self.walk_up[0]
+                    return
+            elif self.vertical_facing == FACE_DOWN:
+                if esta_moviendose:
+                    texturas = self.walk_forward_down_flipped if mirando_izquierda else self.walk_forward_down
+                else:
+                    self.cur_texture = 0
+                    self.texture = self.walk_down_flipped[0] if mirando_izquierda else self.walk_down[0]
+                    return
 
-        # Handle walking
-        if self.should_update_walk == 3:
-            self.cur_texture += 1
-            if self.cur_texture > 7:
-                self.cur_texture = 0
-            self.texture = self.walk_textures[self.cur_texture][self.facing_direction]
-            self.should_update_walk = 0
-            return
+            else:
+                if esta_moviendose:
+                    texturas = self.walk_forward_flipped if mirando_izquierda else self.walk_forward
+                else:
+                    self.cur_texture = 0
+                    self.texture = self.walk_forward_flipped[1] if mirando_izquierda else self.walk_forward[1]
+                    return
+                
+        #Avanzar al siguiente frame de animación
+        self.cur_texture += 1
+        if self.cur_texture >= len(texturas) * UPDATES_PER_FRAME:
+            self.cur_texture = 0
 
-        self.should_update_walk += 1
-
+        self.texture = texturas[self.cur_texture // UPDATES_PER_FRAME]
 
 class Enemy(Character):
     def __init__(self, name_folder, name_file):
