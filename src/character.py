@@ -8,6 +8,8 @@ from PIL import Image
 FACE_UP = 0
 FACE_FORWARD = 1
 FACE_DOWN = 2
+FACE_UP_DIAGONAL = 3
+FACE_DOWN_DIAGONAL = 4
 
 UPDATES_PER_FRAME = 7
 
@@ -78,6 +80,7 @@ class PlayerCharacter(arcade.Sprite):
         ruta_base = ASTRONAUT_PATH
         
         self.change_y_aim = 0
+        self.change_x_aim = 12
 
         #Cada frame es de 64x64
         WIDTH = 64
@@ -108,9 +111,13 @@ class PlayerCharacter(arcade.Sprite):
             self.facing_direction = RIGHT_FACING
 
         #Dirección vertical
-        if self.change_y_aim > 0:
-            self.vertical_facing = FACE_UP
-        elif self.change_y_aim < 0:
+        if self.change_y_aim > 0 and self.change_x_aim != 0:
+            self.vertical_facing = FACE_UP_DIAGONAL  #apunta 45º
+        elif self.change_y_aim > 0 and self.change_x_aim == 0:
+            self.vertical_facing = FACE_UP           #apunta recto arriba
+        elif self.change_y_aim < 0 and self.change_x_aim != 0:
+            self.vertical_facing = FACE_DOWN_DIAGONAL
+        elif self.change_y_aim < 0 and self.change_x_aim == 0:
             self.vertical_facing = FACE_DOWN
         else:
             self.vertical_facing = FACE_FORWARD
@@ -121,41 +128,44 @@ class PlayerCharacter(arcade.Sprite):
 
         #Elegir animación correcta
         if not self.is_on_ground:
-            
-            # Animaciones de salto
-            if self.vertical_facing == FACE_UP:
-                if mirando_izquierda:
-                    texturas = self.jump_forward_up_flipped
-                else:
-                    texturas = self.jump_forward_up
-            elif self.vertical_facing == FACE_DOWN:
-                if mirando_izquierda:
-                    texturas = self.jump_forward_down_flipped
-                else:
-                    texturas = self.jump_forward_down
+            #Animaciones de salto
+            if self.vertical_facing == FACE_UP_DIAGONAL or self.vertical_facing == FACE_UP:
+                texturas = self.jump_forward_up_flipped if mirando_izquierda else self.jump_forward_up
+            elif self.vertical_facing == FACE_DOWN_DIAGONAL or self.vertical_facing == FACE_DOWN:
+                texturas = self.jump_forward_down_flipped if mirando_izquierda else self.jump_forward_down
             else:
-                if mirando_izquierda:
-                    texturas = self.jump_forward_flipped
-                else:
-                    texturas = self.jump_forward
+                texturas = self.jump_forward_flipped if mirando_izquierda else self.jump_forward
+
         else:
-            
-           # Animaciones de caminar o quieto
-            if self.vertical_facing == FACE_UP:
+            #Animaciones de caminar o quieto
+            if self.vertical_facing == FACE_UP_DIAGONAL:
                 if esta_moviendose:
                     texturas = self.walk_forward_up_flipped if mirando_izquierda else self.walk_forward_up
                 else:
                     self.cur_texture = 0
-                    self.texture = self.walk_up_flipped[0] if mirando_izquierda else self.walk_up[0]
+                    self.texture = self.walk_forward_up_flipped[1] if mirando_izquierda else self.walk_forward_up[1]
                     return
-            elif self.vertical_facing == FACE_DOWN:
+            elif self.vertical_facing == FACE_UP:
+                if esta_moviendose:
+                    texturas = self.walk_up_flipped if mirando_izquierda else self.walk_up
+                else:
+                    self.cur_texture = 0
+                    self.texture = self.walk_up_flipped[1] if mirando_izquierda else self.walk_up[1]
+                    return
+            elif self.vertical_facing == FACE_DOWN_DIAGONAL:
                 if esta_moviendose:
                     texturas = self.walk_forward_down_flipped if mirando_izquierda else self.walk_forward_down
                 else:
                     self.cur_texture = 0
-                    self.texture = self.walk_down_flipped[0] if mirando_izquierda else self.walk_down[0]
+                    self.texture = self.walk_forward_down_flipped[1] if mirando_izquierda else self.walk_forward_down[1]
                     return
-
+            elif self.vertical_facing == FACE_DOWN:
+                if esta_moviendose:
+                    texturas = self.walk_down_flipped if mirando_izquierda else self.walk_down
+                else:
+                    self.cur_texture = 0
+                    self.texture = self.walk_down_flipped[1] if mirando_izquierda else self.walk_down[1]
+                    return
             else:
                 if esta_moviendose:
                     texturas = self.walk_forward_flipped if mirando_izquierda else self.walk_forward
