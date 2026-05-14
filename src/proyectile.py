@@ -98,7 +98,7 @@ class ProyectilExplosivo(ProyectilBase):
                 dy = self.juego.player_sprite.center_y - self.center_y
                 angulo_empuje = math.atan2(dy, dx)
                 fuerza = 25 
-                self.juego.player_sprite.change_x += math.cos(angulo_empuje) * fuerza
+                #self.juego.player_sprite.change_x += math.cos(angulo_empuje) * fuerza/3
                 self.juego.player_sprite.change_y += math.sin(angulo_empuje) * fuerza
 
             # 2. Daño a enemigos en área
