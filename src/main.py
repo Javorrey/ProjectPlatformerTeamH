@@ -490,20 +490,20 @@ class GameView(arcade.View):
             if self.velocidad_bala_x == 0 and self.velocidad_bala_y == 12:
                 return
             elif self.velocidad_bala_y >= 0:
-                self.velocidad_bala_x -= 6
                 self.velocidad_bala_y += 6
+                self.velocidad_bala_x -=6
             else:
-                self.velocidad_bala_x += 6
                 self.velocidad_bala_y += 6
+                self.velocidad_bala_x +=6
         elif key == arcade.key.DOWN or key == arcade.key.S:
             if self.velocidad_bala_x ==0 and self.velocidad_bala_y == -12:
                 return
-            elif self.velocidad_bala_y >= 0:
-                self.velocidad_bala_x += 6
+            elif self.velocidad_bala_y <= 0:
                 self.velocidad_bala_y -= 6
+                self.velocidad_bala_x -=6
             else:
-                self.velocidad_bala_x -= 6
                 self.velocidad_bala_y -= 6
+                self.velocidad_bala_x +=6
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.left_pressed = True
         elif key == arcade.key.RIGHT or key == arcade.key.D:
