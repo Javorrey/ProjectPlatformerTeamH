@@ -30,4 +30,4 @@ ASTRONAUT_PATH = BASE_DIR / "assets" / "sprites" / "astronaut"
 ZOMBIE_PATH = BASE_DIR / "assets" / "sprites" / "zombie"
 
 #Alien Constants
-ALIEN_PATH = BASE_DIR / "assets" / "sprites" / "brain_alien"
+ALIEN_PATH = BASE_DIR / "assets" / "sprites" / "brain alien"

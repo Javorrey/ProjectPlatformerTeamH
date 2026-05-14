@@ -227,9 +227,12 @@ class ZombieEnemy(Enemy):
         super().__init__("zombie", "zombie")
         self.health = 50
 
+        WIDTH = 64
+        HEIGHT = 64
+
         ruta_base = ZOMBIE_PATH
 
         #Zombie: Caminar
-        self.zombie_walk_forward, self.zombie_walk_forward_flipped = load_spritesheet_pair(str(ruta_base / "zombie_walk_forward_2.0.png"), 1,WIDTH, HEIGHT, 1)
-        self.zombie_jump_forward_up, self.zombie_jump_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "zombie_jump_forward_up_2.0.png"), 1,WIDTH, HEIGHT, 1)
-        self.zombie_jump_forward_down, self.zombie_jump_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "zombie_jump_forward_down_2.0.png"), 1,WIDTH, HEIGHT, 1)
+        self.zombie_walk_forward, self.zombie_walk_forward_flipped = load_spritesheet_pair(str(ruta_base / "zombie_walk_forward_2.0.png"), 1, WIDTH, HEIGHT, 1)
+        self.zombie_jump_forward_up, self.zombie_jump_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "zombie_jump_forward_up_2.0.png"), 1, WIDTH, HEIGHT, 1)
+        self.zombie_jump_forward_down, self.zombie_jump_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "zombie_jump_forward_down_2.0.png"), 1, WIDTH, HEIGHT, 1)
