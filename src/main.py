@@ -268,7 +268,8 @@ class GameView(arcade.View):
                     self.player_sprite.center_x, 
                     self.player_sprite.center_y, 
                     vel_x, 
-                    vel_y
+                    vel_y,
+                    self
                 )
 
                 self.scene.add_sprite("Bullets", bullet)
@@ -292,14 +293,15 @@ class GameView(arcade.View):
                     self.player_sprite.center_x, 
                     self.player_sprite.center_y, 
                     vel_x, 
-                    vel_y
+                    vel_y,
+                    self
                 )
                 
                 self.scene.add_sprite("Bullets", misil)
                 
                 # Desactivar el arma hasta que pase el cooldown
                 self.can_shoot_explosivo = False
-                # Opcional: fuerza a soltar el clic para que no dispare en ráfaga automática
+                # Fuerza a soltar el clic para que no dispare en ráfaga automática
                 self.shoot_explosivo_pressed = False 
         else:
             # Si no puede disparar, el temporizador empieza a contar
@@ -331,65 +333,7 @@ class GameView(arcade.View):
             elif enemy.left < enemy.boundary_left and enemy.change_x < 0:
                 enemy.change_x *= -1
 
-        for bullet in self.scene["Bullets"]:
-            hit_list = arcade.check_for_collision_with_lists(
-                bullet,
-                [
-                    self.scene["Enemies"],
-                    self.scene["walls"],
-                    self.scene["Platforms"],
-                    self.scene["Moving_Platforms"]
-                ]
-            )
-
-            # Si la bala ha chocado
-            if hit_list:
-                
-                if isinstance(bullet, ProyectilExplosivo):
-                    #Explosive Jump Mechanic
-                    dist_jugador = arcade.get_distance_between_sprites(bullet, self.player_sprite)
-                    if dist_jugador <= bullet.radio_explosion:
-                        #Calcular trayectoria
-                        dx = self.player_sprite.center_x - bullet.center_x
-                        dy = self.player_sprite.center_y - bullet.center_y
-                        angulo_empuje = math.atan2(dy, dx)
-                            
-                        #Fuerza explosión
-                        fuerza = 25 
-                            
-                        #Aplicar empuje
-                        self.player_sprite.change_x += math.cos(angulo_empuje) * fuerza
-                        self.player_sprite.change_y += math.sin(angulo_empuje) * fuerza
-                    # Recorrer todos los enemigos para ver cuáles están dentro del radio de explosión
-                    for enemy in self.scene["Enemies"]:
-                        distancia = arcade.get_distance_between_sprites(bullet, enemy)
-                        if distancia <= bullet.radio_explosion:
-                            enemy.health -= bullet.dmg
-                            if enemy.health <= 0:
-                                enemy.remove_from_sprite_lists()
-                                self.score += 150
-                                
-                else:
-                    for collision in hit_list:
-                        # Solo daña al enemigo que ha tocado físicamente
-                        if self.scene["Enemies"] in collision.sprite_lists:
-                            if hasattr(bullet, 'dmg'):
-                                collision.health -= bullet.dmg
-                            else:
-                                collision.health -= 25 # Daño por defecto
-
-                            if collision.health <= 0:
-                                collision.remove_from_sprite_lists()
-                                self.score += 150
-
-                # 3. Sin importar el tipo, al chocar la bala se destruye y suena
-                bullet.remove_from_sprite_lists()
-                arcade.play_sound(self.hit_sound)
-
-            # Remove bullet if it leaves the map area.
-            # Bullets only travel horizontally, so we only need to check left and right.
-            if (bullet.right < 0) or (bullet.left > self.end_of_map):
-                bullet.remove_from_sprite_lists()
+        
 
         # See if we hit any coins
         player_collision_list = arcade.check_for_collision_with_lists(
