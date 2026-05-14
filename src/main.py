@@ -327,20 +327,49 @@ class GameView(arcade.View):
                 ]
             )
 
+            # Si la bala ha chocado
             if hit_list:
+                
+                if isinstance(bullet, ProyectilExplosivo):
+                    #Explosive Jump Mechanic
+                    dist_jugador = arcade.get_distance_between_sprites(bullet, self.player_sprite)
+                    if dist_jugador <= bullet.radio_explosion:
+                        #Calcular trayectoria
+                        dx = self.player_sprite.center_x - bullet.center_x
+                        dy = self.player_sprite.center_y - bullet.center_y
+                        angulo_empuje = math.atan2(dy, dx)
+                            
+                        #Fuerza explosión
+                        fuerza = 25 
+                            
+                        #Aplicar empuje
+                        self.player_sprite.change_x += math.cos(angulo_empuje) * fuerza
+                        self.player_sprite.change_y += math.sin(angulo_empuje) * fuerza
+                    # Recorrer todos los enemigos para ver cuáles están dentro del radio de explosión
+                    for enemy in self.scene["Enemies"]:
+                        distancia = arcade.get_distance_between_sprites(bullet, enemy)
+                        if distancia <= bullet.radio_explosion:
+                            enemy.health -= bullet.dmg
+                            if enemy.health <= 0:
+                                enemy.remove_from_sprite_lists()
+                                self.score += 150
+                                
+                else:
+                    for collision in hit_list:
+                        # Solo daña al enemigo que ha tocado físicamente
+                        if self.scene["Enemies"] in collision.sprite_lists:
+                            if hasattr(bullet, 'dmg'):
+                                collision.health -= bullet.dmg
+                            else:
+                                collision.health -= 25 # Daño por defecto
+
+                            if collision.health <= 0:
+                                collision.remove_from_sprite_lists()
+                                self.score += 150
+
+                # 3. Sin importar el tipo, al chocar la bala se destruye y suena
                 bullet.remove_from_sprite_lists()
-
-                for collision in hit_list:
-                    if self.scene["Enemies"] in collision.sprite_lists:
-                        collision.health -= bullet.dmg
-
-                        if collision.health <= 0:
-                            collision.remove_from_sprite_lists()
-                            self.score += 150
-
-                        arcade.play_sound(self.hit_sound)
-
-                return
+                arcade.play_sound(self.hit_sound)
 
             # Remove bullet if it leaves the map area.
             # Bullets only travel horizontally, so we only need to check left and right.
