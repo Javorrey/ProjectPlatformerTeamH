@@ -32,39 +32,6 @@ def load_spritesheet_pair(path: str, frame_count: int, frame_w: int, frame_h: in
 
     return frames_normales, frames_volteados
 
-class Character(arcade.Sprite):
-    def __init__(self, name_folder, name_file):
-        super().__init__()
-
-        self.facing_direction = RIGHT_FACING
-
-        self.cur_texture = 0
-
-        main_path = f":resources:images/animated_characters/{name_folder}/{name_file}"
-        # Load textures for idle, jump, and fall states
-        idle_texture = arcade.load_texture(f"{main_path}_idle.png")
-        jump_texture = arcade.load_texture(f"{main_path}_jump.png")
-        fall_texture = arcade.load_texture(f"{main_path}_fall.png")
-        # Make pairs with left and right facing textures
-        self.idle_texture_pair = idle_texture, idle_texture.flip_left_right()
-        self.jump_texture_pair = jump_texture, jump_texture.flip_left_right()
-        self.fall_texture_pair = fall_texture, fall_texture.flip_left_right()
-        # Load textures for walking with left and right facing textures
-        self.walk_textures = []
-        for i in range(8):
-            texture = arcade.load_texture(f"{main_path}_walk{i}.png")
-            self.walk_textures.append((texture, texture.flip_left_right()))
-
-        self.climbing_textures = (
-            arcade.load_texture(f"{main_path}_climb0.png"),
-            arcade.load_texture(f"{main_path}_climb1.png")
-        )
-
-        # This variable will change dynamically and will represent the currently
-        # active texture.
-        self.texture = self.idle_texture_pair[0]
-
-
 class PlayerCharacter(arcade.Sprite):
     """Jugador astronauta"""
     def __init__(self):
@@ -181,13 +148,15 @@ class PlayerCharacter(arcade.Sprite):
 
         self.texture = texturas[self.cur_texture // UPDATES_PER_FRAME]
 
-class Enemy(Character):
-    def __init__(self, name_folder, name_file):
-        super().__init__(name_folder, name_file)
+class Enemy(arcade.Sprite):
+    def __init__(self):
+        super().__init__()
 
         #Cada frame es de 64x64
         WIDTH = 64
         HEIGHT = 64
+
+        self.cur_texture = 0
 
         self.should_update_walk = 0
 
@@ -216,15 +185,73 @@ class Enemy(Character):
         self.should_update_walk += 1
 
 
-class RobotEnemy(Enemy):
+class AlienEnemy(Enemy):
     def __init__(self):
-        super().__init__("robot", "robot")
+        super().__init__()
         self.health = 100
+
+        WIDTH = 64
+        HEIGHT = 64
+
+        ruta_base = ALIEN_PATH
+
+        #Alien: Caminar
+        self.alien_walk_forward, self.alien_walk_forward_flipped = load_spritesheet_pair(str(ruta_base / "alien_walk_forward_2.0.png"), 1, WIDTH, HEIGHT, 1)
+        self.alien_walk_forward_up, self.alien_walk_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "alien_walk_forward_up_2.0.png"), 1, WIDTH, HEIGHT, 1)
+        self.alien_walk_forward_down, self.alien_walk_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "alien_walk_forward_down_2.0.png"), 1, WIDTH, HEIGHT, 1)
+        
+    def update_animation(self, delta_time): 
+        super().update_animation(delta_time)
+        #Variables auxiliares para facilitar la lectura
+        mirando_izquierda = self.facing_direction == LEFT_FACING
+        esta_moviendose = self.change_x != 0
+
+        #Animaciones de caminar o quieto
+        if self.vertical_facing == FACE_UP_DIAGONAL:
+            if esta_moviendose:
+                texturas = self.alien_walk_forward_up_flipped if mirando_izquierda else self.alien_walk_forward_up
+            else:
+                self.cur_texture = 0
+                self.texture = self.alien_walk_forward_up_flipped[1] if mirando_izquierda else self.alien_walk_forward_up[1]
+                return
+        elif self.vertical_facing == FACE_UP:
+            if esta_moviendose:
+                texturas = self.alien_jump_forward_up_flipped if mirando_izquierda else self.alien_jump_forward_up
+            else:
+                self.cur_texture = 0
+                self.texture = self.alien_jump_forward_up_flipped[1] if mirando_izquierda else self.alien_jump_forward_up[1]
+                return
+        elif self.vertical_facing == FACE_DOWN_DIAGONAL:
+            if esta_moviendose:
+                texturas = self.alien_jump_forward_down_flipped if mirando_izquierda else self.alien_jump_forward_down
+            else:
+                self.cur_texture = 0
+                self.texture = self.alien_jump_forward_down_flipped[1] if mirando_izquierda else self.alien_jump_forward_down[1]
+                return
+        elif self.vertical_facing == FACE_DOWN:
+            if esta_moviendose:
+                texturas = self.alien_jump_forward_down_flipped if mirando_izquierda else self.alien_jump_forward_down
+            else:
+                self.cur_texture = 0
+                self.texture = self.alien_jump_forward_down_flipped[1] if mirando_izquierda else self.alien_jump_forward_down[1]
+                return
+        else:
+            if esta_moviendose:
+                texturas = self.alien_walk_forward_flipped if mirando_izquierda else self.alien_walk_forward
+            else:
+                self.cur_texture = 0
+                self.texture = self.alien_walk_forward_flipped[1] if mirando_izquierda else self.alien_walk_forward[1]
+                return
+            
+            #Avanzar al siguiente frame de animación   
+            self.cur_texture += 1
+            if self.cur_texture >= len(texturas) * UPDATES_PER_FRAME:
+                self.cur_texture = 0
 
 
 class ZombieEnemy(Enemy):
     def __init__(self):
-        super().__init__("zombie", "zombie")
+        super().__init__()
         self.health = 50
 
         WIDTH = 64
@@ -236,3 +263,50 @@ class ZombieEnemy(Enemy):
         self.zombie_walk_forward, self.zombie_walk_forward_flipped = load_spritesheet_pair(str(ruta_base / "zombie_walk_forward_2.0.png"), 1, WIDTH, HEIGHT, 1)
         self.zombie_jump_forward_up, self.zombie_jump_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "zombie_jump_forward_up_2.0.png"), 1, WIDTH, HEIGHT, 1)
         self.zombie_jump_forward_down, self.zombie_jump_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "zombie_jump_forward_down_2.0.png"), 1, WIDTH, HEIGHT, 1)
+
+    def update_animation(self, delta_time):
+        super().update_animation(delta_time)
+        #Variables auxiliares para facilitar la lectura
+        mirando_izquierda = self.facing_direction == LEFT_FACING
+        esta_moviendose = self.change_x != 0
+
+        #Animaciones de caminar o quieto
+        if self.vertical_facing == FACE_UP_DIAGONAL:
+            if esta_moviendose:
+                texturas = self.zombie_walk_forward_up_flipped if mirando_izquierda else self.zombie_walk_forward_up
+            else:
+                self.cur_texture = 0
+                self.texture = self.zombie_walk_forward_up_flipped[1] if mirando_izquierda else self.zombie_walk_forward_up[1]
+                return
+        elif self.vertical_facing == FACE_UP:
+            if esta_moviendose:
+                texturas = self.zombie_walk_forward_up_flipped if mirando_izquierda else self.zombie_walk_forward_up
+            else:
+                self.cur_texture = 0
+                self.texture = self.zombie_walk_forward_up_flipped[1] if mirando_izquierda else self.zombie_walk_forward_up[1]
+                return
+        elif self.vertical_facing == FACE_DOWN_DIAGONAL:
+            if esta_moviendose:
+                texturas = self.zombie_walk_forward_down_flipped if mirando_izquierda else self.zombie_walk_forward_down
+            else:
+                self.cur_texture = 0
+                self.texture = self.zombie_walk_forward_down_flipped[1] if mirando_izquierda else self.zombie_walk_forward_down[1]
+                return
+        elif self.vertical_facing == FACE_DOWN:
+            if esta_moviendose:
+                texturas = self.zombie_walk_forward_down_flipped if mirando_izquierda else self.zombie_walk_forward_down
+            else:
+                self.cur_texture = 0
+                self.texture = self.zombie_walk_forward_down_flipped[1] if mirando_izquierda else self.zombie_walk_forward_down[1]
+                return
+        else:
+            if esta_moviendose:
+                texturas = self.zombie_walk_forward_flipped if mirando_izquierda else self.zombie_walk_forward
+            else:
+                self.cur_texture = 0
+                self.texture = self.zombie_walk_forward_flipped[1] if mirando_izquierda else self.zombie_walk_forward[1]
+                return
+            #Avanzar al siguiente frame de animación
+            self.cur_texture += 1
+            if self.cur_texture >= len(texturas) * UPDATES_PER_FRAME:
+                self.cur_texture = 0

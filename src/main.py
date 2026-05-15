@@ -145,7 +145,7 @@ class GameView(arcade.View):
             )
             enemy_type = enemy_marker.properties["type"]
             if enemy_type == "robot":
-                enemy = RobotEnemy()
+                enemy = AlienEnemy()
             elif enemy_type == "zombie":
                 enemy = ZombieEnemy()
             enemy.center_x = math.floor(
