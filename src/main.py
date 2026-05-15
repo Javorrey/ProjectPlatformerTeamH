@@ -138,16 +138,23 @@ class GameView(arcade.View):
 
         # -- Enemies
         enemies_layer = self.tile_map.object_lists["Enemies"]
+        ENEMY_TYPES = {
+                "alien": AlienEnemy,
+                "zombie": ZombieEnemy,
+            }
 
         for enemy_marker in enemies_layer:
             coordinates = self.tile_map.get_cartesian(
                 enemy_marker.shape[0], enemy_marker.shape[1]
             )
             enemy_type = enemy_marker.properties["type"]
-            if enemy_type == "robot":
-                enemy = AlienEnemy()
-            elif enemy_type == "zombie":
-                enemy = ZombieEnemy()
+            enemy_class = ENEMY_TYPES.get(enemy_type)
+
+            if enemy_class is None:
+                continue
+
+            enemy = enemy_class()
+
             enemy.center_x = math.floor(
                 coordinates[0] * TILE_SCALING * self.tile_map.tile_width
             )
