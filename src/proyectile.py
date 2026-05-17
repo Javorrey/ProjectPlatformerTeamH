@@ -35,7 +35,9 @@ class ProyectilBase(arcade.Sprite):
                 self.juego.scene["Enemies"],
                 self.juego.scene["walls"],
                 self.juego.scene["Platforms"],
-                self.juego.scene["Moving_Platforms"]
+                self.juego.scene["Moving_Platforms"],
+                self.juego.scene["Paredes_Destructibles"]
+                
             ]
         )
 
@@ -46,6 +48,12 @@ class ProyectilBase(arcade.Sprite):
                     if collision.health <= 0:
                         collision.remove_from_sprite_lists()
                         self.juego.score += 150 # Sumamos puntos a la partida
+                elif self.juego.scene["Paredes_Destructibles"] in collision.sprite_lists:
+                    if hasattr(collision, "health"):
+                        collision.health -= self.dmg
+                        if collision.health <= 0 :
+                            collision.remove_from_sprite_lists()
+
 
             self.remove_from_sprite_lists()
             arcade.play_sound(self.juego.hit_sound)
@@ -86,7 +94,9 @@ class ProyectilExplosivo(ProyectilBase):
             [
                 self.juego.scene["Enemies"],
                 self.juego.scene["walls"],
-                self.juego.scene["Platforms"]
+                self.juego.scene["Platforms"],
+                self.juego.scene["Paredes_Destructibles"]
+
             ]
         )
 
@@ -109,6 +119,14 @@ class ProyectilExplosivo(ProyectilBase):
                     if enemy.health <= 0:
                         enemy.remove_from_sprite_lists()
                         self.juego.score += 150
+                
+            for bloque in self.juego.scene["Paredes_Destructibles"]:
+                distancia_pared = arcade.get_distance_between_sprites(self, bloque)
+                if distancia_pared <= self.radio_explosion:
+                    bloque.health -= self.dmg  # Quita 50 de daño (el misil la rompe de 1 tiro)
+                    if bloque.health <= 0:
+                        bloque.remove_from_sprite_lists()
+                        self.juego.score += 50
             
             self.remove_from_sprite_lists()
             arcade.play_sound(self.juego.hit_sound)

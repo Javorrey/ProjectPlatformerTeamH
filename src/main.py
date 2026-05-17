@@ -130,6 +130,8 @@ class GameView(arcade.View):
 
         # Create our Scene Based on the TileMap
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
+        for bloque in self.scene["Paredes_Destructibles"]:
+            bloque.health= 150
 
         self.player_sprite = PlayerCharacter()
         self.player_sprite.center_x = 128
@@ -139,14 +141,14 @@ class GameView(arcade.View):
         # -- Enemies
         enemies_layer = self.tile_map.object_lists["Enemies"]
         ENEMY_TYPES = {
-                "alien": AlienEnemy,
+                "alien": ZombieEnemy,
                 "zombie": ZombieEnemy,
             }
-
         for enemy_marker in enemies_layer:
             coordinates = self.tile_map.get_cartesian(
                 enemy_marker.shape[0], enemy_marker.shape[1]
             )
+            
             enemy_type = enemy_marker.properties["type"]
             enemy_class = ENEMY_TYPES.get(enemy_type)
 
@@ -156,10 +158,10 @@ class GameView(arcade.View):
             enemy = enemy_class()
 
             enemy.center_x = math.floor(
-                coordinates[0] * TILE_SCALING * self.tile_map.tile_width
+                (coordinates[0]+1) * TILE_SCALING * self.tile_map.tile_width
             )
             enemy.center_y = math.floor(
-                (coordinates[1] + 1) * (self.tile_map.tile_height * TILE_SCALING)
+                (coordinates[1] +1) * (self.tile_map.tile_height * TILE_SCALING)
             )
             if "boundary_left" in enemy_marker.properties:
                 enemy.boundary_left = enemy_marker.properties["boundary_left"]
@@ -169,7 +171,7 @@ class GameView(arcade.View):
                 enemy.change_x = enemy_marker.properties["change_x"]
 
             self.scene.add_sprite("Enemies", enemy)
-
+            
         # Create a Platformer Physics Engine, this will handle moving our
         # player as well as collisions between the player sprite and
         # whatever SpriteList we specify for the walls.
@@ -177,7 +179,8 @@ class GameView(arcade.View):
         # platforms parameter that is intended for moving platforms.
         # If a platform is supposed to move, and is added to the walls list,
         # it will not be moved.
-        self.mis_paredes= [self.scene["walls"], self.scene["Platforms"]]
+        
+        self.mis_paredes= [self.scene["walls"], self.scene["Platforms"], self.scene["Paredes_Destructibles"]]
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
             walls=self.mis_paredes,
@@ -185,6 +188,7 @@ class GameView(arcade.View):
             platforms=self.scene["Moving_Platforms"],
             
         )
+        
 
         # Initialize our camera, setting a viewport the size of our window.
         self.camera = arcade.Camera2D()
