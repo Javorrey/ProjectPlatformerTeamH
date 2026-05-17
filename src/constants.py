@@ -18,7 +18,7 @@ PLAYER_JUMP_SPEED = 20
 RIGHT_FACING = 0
 LEFT_FACING = 1
 
-CURRENT_MAP = "nivel-prueba.tmj"
+CURRENT_MAP = "nivel1.tmj"
 BASE_DIR = Path(__file__).resolve().parent.parent
 MAP_FILE = BASE_DIR / "assets" / "maps" / CURRENT_MAP
 
