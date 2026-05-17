@@ -3,6 +3,11 @@ import arcade
 from niveles import VistaNiveles
 from ajustes import VistaAjustes
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from constants import *
+
 class mainMenu(arcade.View):
     def __init__(self):
         """
@@ -10,16 +15,16 @@ class mainMenu(arcade.View):
         """
         super().__init__()
 
-        arcade.load_font("assets/fonts/fuente_menu.ttf")
+        arcade.load_font(str(BASE_DIR / "assets" / "fonts" / "fuente_menu.ttf"))
         
-        self.fondo = arcade.load_texture("assets/images/menu/main/fondo_menu.png")
+        self.fondo = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "fondo_menu.png"))
 
         self.lista_botones = arcade.SpriteList()
         
-        self.boton_jugar = arcade.Sprite("assets/images/menu/main/boton_jugar_menu.png", scale = 1.8)
-        self.boton_nivel = arcade.Sprite("assets/images/menu/main/boton_nivel_menu.png", scale = 1.8)
-        self.boton_ajustes = arcade.Sprite("assets/images/menu/main/boton_ajustes_menu.png", scale = 1.8)
-        self.boton_salir = arcade.Sprite("assets/images/menu/main/boton_salir_menu.png", scale = 1.8)
+        self.boton_jugar = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_jugar_menu.png"), scale = 1.8)
+        self.boton_nivel = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_nivel_menu.png"), scale = 1.8)
+        self.boton_ajustes = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_ajustes_menu.png"), scale = 1.8)
+        self.boton_salir = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_salir_menu.png"), scale = 1.8)
 
         self.lista_botones.append(self.boton_jugar)
         self.lista_botones.append(self.boton_nivel)

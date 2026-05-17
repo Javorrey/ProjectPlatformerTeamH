@@ -1,5 +1,10 @@
 import arcade
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from constants import *
+
 class VistaAjustes(arcade.View):
     def __init__(self):
         """
@@ -7,15 +12,15 @@ class VistaAjustes(arcade.View):
         """
         super().__init__()
 
-        arcade.load_font("assets/fonts/fuente_menu.ttf")
+        arcade.load_font(str(BASE_DIR / "assets" / "fonts" / "fuente_menu.ttf"))
         
-        self.fondo = arcade.load_texture("assets/images/menu/ajustes/fondo_menu.png")
-        self.icono_sonido = arcade.load_texture("assets/images/menu/ajustes/icono_sonido_menu.png")
-        self.icono_pantalla = arcade.load_texture("assets/images/menu/ajustes/icono_pantalla_menu.png")
+        self.fondo = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "ajustes"/ "fondo_menu.png"))
+        self.icono_sonido = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "ajustes" / "icono_sonido_menu.png"))
+        self.icono_pantalla = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "ajustes" / "icono_pantalla_menu.png"))
 
         self.lista_botones = arcade.SpriteList()
         
-        self.boton_atras = arcade.Sprite("assets/images/menu/ajustes/flecha_atras_menu.png", scale = 1.8)
+        self.boton_atras = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "ajustes" / "flecha_atras_menu.png"), scale = 1.8)
 
         self.lista_botones.append(self.boton_atras)
 
