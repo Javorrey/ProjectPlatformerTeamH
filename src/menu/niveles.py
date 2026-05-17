@@ -1,5 +1,10 @@
 import arcade
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from constants import *
+
 class VistaNiveles(arcade.View):
     def __init__(self):
         """
@@ -11,14 +16,13 @@ class VistaNiveles(arcade.View):
 
         self.lista_botones = arcade.SpriteList()
         
-        self.boton_nivel1 = arcade.Sprite("assets/images/menu/nivel/boton_nivel1_menu.png", scale = 1.8)
-        self.boton_nivel2 = arcade.Sprite("assets/images/menu/nivel/boton_nivel2_menu.png", scale = 1.8)
-        self.boton_nivel3 = arcade.Sprite("assets/images/menu/nivel/boton_nivel3_menu.png", scale = 1.8)
-        self.boton_nivel4 = arcade.Sprite("assets/images/menu/nivel/boton_nivel4_menu.png", scale = 1.8)
-        self.boton_nivel5 = arcade.Sprite("assets/images/menu/nivel/boton_nivel5_menu.png", scale = 1.8)
+        self.boton_nivel1 = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "nivel" / "boton_nivel1_menu.png"), scale = 1.8)
+        self.boton_nivel2 = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "nivel" / "boton_nivel2_menu.png"), scale = 1.8)
+        self.boton_nivel3 = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "nivel" / "boton_nivel3_menu.png"), scale = 1.8)
+        self.boton_nivel4 = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "nivel" / "boton_nivel4_menu.png"), scale = 1.8)
+        self.boton_nivel5 = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "nivel" / "boton_nivel5_menu.png"), scale = 1.8)
 
-        self.boton_atras = arcade.Sprite("assets/images/menu/nivel/flecha_atras_menu.png", scale = 1.8)
-
+        self.boton_atras = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "nivel" / "flecha_atras_menu.png"), scale = 1.8)
 
         self.lista_botones.append(self.boton_nivel1)
         self.lista_botones.append(self.boton_nivel2)

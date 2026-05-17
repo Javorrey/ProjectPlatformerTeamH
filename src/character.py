@@ -4,7 +4,7 @@ import arcade
 from constants import *
 from PIL import Image
 
-#Constantes de dirección vertical
+#Constantes de dirección 
 FACE_UP = 0
 FACE_FORWARD = 1
 FACE_DOWN = 2

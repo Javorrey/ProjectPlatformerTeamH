@@ -1,5 +1,10 @@
 import arcade
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from constants import *
+
 class GameOver(arcade.View):
     def __init__(self):
         """
@@ -7,12 +12,12 @@ class GameOver(arcade.View):
         """
         super().__init__()
         
-        self.fondo = arcade.load_texture("assets/images/gameOver/fondo_game_over.png")
+        self.fondo = arcade.load_texture(str(BASE_DIR / "assets" / "images"/ "gameOver" / "fondo_game_over.png"))
 
         self.lista_botones = arcade.SpriteList()
         
-        self.boton_volver_a_jugar = arcade.Sprite("assets/images/gameOver/boton_volver_a_jugar_game_over.png", scale = 1.8)
-        self.boton_ir_al_menu = arcade.Sprite("assets/images/gameOver/boton_ir_al_menu_game_over.png", scale=1.8)
+        self.boton_volver_a_jugar = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "gameOver" / "boton_volver_a_jugar_game_over.png"), scale = 1.8)
+        self.boton_ir_al_menu = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "gameOver" / "boton_ir_al_menu_game_over.png"), scale = 1.8)
 
         self.lista_botones.append(self.boton_volver_a_jugar)
         self.lista_botones.append(self.boton_ir_al_menu)
