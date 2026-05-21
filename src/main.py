@@ -466,6 +466,10 @@ class GameView(arcade.View):
             self.right_pressed = True
         elif key ==arcade.key.SPACE:
             self.up_pressed = True
+        elif key == arcade.key.J:
+            self.shoot_pressed = True
+        elif key == arcade.key.K:
+            self.shoot_explosivo_pressed = True
 
         self.process_keychange()
 
@@ -478,6 +482,10 @@ class GameView(arcade.View):
             self.right_pressed = False
         elif key ==arcade.key.SPACE:
             self.up_pressed = False
+        elif key == arcade.key.J:
+            self.shoot_pressed = False
+        elif key == arcade.key.K:
+            self.shoot_explosivo_pressed = False
 
         self.process_keychange()
 
