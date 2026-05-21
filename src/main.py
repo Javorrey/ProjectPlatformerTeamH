@@ -57,7 +57,7 @@ class GameView(arcade.View):
         self.shoot_pressed = False
         self.shoot_explosivo_pressed = False
 
-        self.velocidad_bala_x= 12
+        self.velocidad_bala_x= 12 #12
         self.velocidad_bala_y= 0
 
         # Variable to hold our texture for our player
@@ -276,9 +276,9 @@ class GameView(arcade.View):
                 vel_y = self.velocidad_bala_y
                 
                 # Usar la nueva clase LaserAzul
-                bullet = LaserAzul(
-                    self.player_sprite.center_x, 
-                    self.player_sprite.center_y, 
+                bullet = DisparoPrincipal(
+                    self.player_sprite.center_x - 16, 
+                    self.player_sprite.center_y - 4, 
                     vel_x, 
                     vel_y,
                     self

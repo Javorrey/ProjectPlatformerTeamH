@@ -66,7 +66,6 @@ class ProyectilBase(arcade.Sprite):
 
 class LaserAzul(ProyectilBase):
     def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
-        # Le pasamos la imagen, la escala (0.8) y el daño (25)
         super().__init__(
             pos_x, pos_y, vel_x, vel_y, 
             ":resources:images/space_shooter/laserBlue01.png", 
@@ -74,6 +73,7 @@ class LaserAzul(ProyectilBase):
             25, 
             juego
         )
+
 
 class ProyectilExplosivo(ProyectilBase):
     def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
@@ -130,3 +130,90 @@ class ProyectilExplosivo(ProyectilBase):
             
             self.remove_from_sprite_lists()
             arcade.play_sound(self.juego.hit_sound)
+
+
+class DisparoPrincipal(arcade.Sprite):
+    def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
+        super().__init__()
+        self.center_x = pos_x
+        self.center_y = pos_y
+        self.change_x = vel_x
+        self.change_y = vel_y
+        self.dmg = 25
+        self.juego = juego
+
+        self.path_or_texture = str(PROJECTILE_PATH / "Friendly Fire 2.0.png")
+        self.texture_sheet = arcade.load_spritesheet(self.path_or_texture)
+        self.texture_list = self.texture_sheet.get_texture_grid(
+            size=(64, 64),  
+            columns=2,      
+            count=5         
+        )
+        #print(len(self.texture_list))
+
+        self.texture = self.texture_list[0]
+
+        self.impact = False
+        self.animation_frame = 0
+        self.accumulatedTime = 0.0
+
+        angulo_radianes = math.atan2(self.change_y, self.change_x)
+        self.angle = -math.degrees(angulo_radianes)
+
+    def update(self, delta_time: float, *args, **kwargs):
+        if not self.impact:
+            super().update(*args, **kwargs)
+            self.check_collisions()
+
+            if (self.right < 0) or (self.left > self.juego.end_of_map):
+                self.remove_from_sprite_lists()
+            if (self.bottom < 0) or (self.top > self.juego.tile_map.height * self.juego.tile_map.tile_height):
+                self.remove_from_sprite_lists()
+
+        else:
+            self.accumulatedTime += delta_time
+            animation_speed = 0.1
+
+            if self.accumulatedTime >= animation_speed:
+                self.accumulatedTime = 0.0
+                self.animation_frame += 1
+
+                if self.animation_frame < len(self.texture_list):
+                    self.texture = self.texture_list[self.animation_frame]
+                else:
+                    self.remove_from_sprite_lists()
+
+    def check_collisions(self):
+        if self.impact:
+            return
+        hit_list = arcade.check_for_collision_with_lists(
+            self,
+            [
+                self.juego.scene["Enemies"],
+                self.juego.scene["walls"],
+                self.juego.scene["Platforms"],
+                self.juego.scene["Moving_Platforms"],
+                self.juego.scene["Paredes_Destructibles"]
+                
+            ]
+        )
+        if hit_list:
+            for collision in hit_list:
+                if self.juego.scene["Enemies"] in collision.sprite_lists:
+                    collision.health -= self.dmg
+                    if collision.health <= 0:
+                        collision.remove_from_sprite_lists()
+                        self.juego.score += 150 # Sumamos puntos a la partida
+                elif self.juego.scene["Paredes_Destructibles"] in collision.sprite_lists:
+                    if hasattr(collision, "health"):
+                        collision.health -= self.dmg
+                        if collision.health <= 0 :
+                            collision.remove_from_sprite_lists()
+                            self.juego.score += 50
+            
+            self.change_x = 0
+            self.change_y = 0
+            self.impact = True
+            arcade.play_sound(self.juego.hit_sound)
+            self.animation_frame = 0
+            self.texture = self.texture_list[self.animation_frame]

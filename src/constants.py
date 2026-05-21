@@ -31,3 +31,6 @@ ZOMBIE_PATH = BASE_DIR / "assets" / "sprites" / "zombie"
 
 #Alien Constants
 ALIEN_PATH = BASE_DIR / "assets" / "sprites" / "brain alien"
+
+#Projectile Constants
+PROJECTILE_PATH = BASE_DIR / "assets" / "sprites" / "proyectiles"
