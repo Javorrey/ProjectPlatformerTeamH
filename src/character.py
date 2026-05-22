@@ -170,10 +170,7 @@ class Enemy(arcade.Sprite):
             self.facing_direction = LEFT_FACING
         elif self.change_x > 0 and self.facing_direction == LEFT_FACING:
             self.facing_direction = RIGHT_FACING
-
-        
-
-
+      
 class AlienEnemy(Enemy):
     def __init__(self):
         super().__init__()
@@ -238,8 +235,6 @@ class AlienEnemy(Enemy):
         self.cur_texture += 1
         if self.cur_texture >= len(texturas) * UPDATES_PER_FRAME:
             self.cur_texture = 0
-        
-
 
 class ZombieEnemy(Enemy):
     def __init__(self):
@@ -258,6 +253,7 @@ class ZombieEnemy(Enemy):
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
+        
         #Variables auxiliares para facilitar la lectura
         mirando_izquierda = self.facing_direction == LEFT_FACING
         esta_moviendose = self.change_x != 0
@@ -298,9 +294,35 @@ class ZombieEnemy(Enemy):
                 self.cur_texture = 0
                 self.texture = self.zombie_walk_forward_flipped[1] if mirando_izquierda else self.zombie_walk_forward[1]
                 return
+            
         #Avanzar al siguiente frame de animación
         frame = self.cur_texture // UPDATES_PER_FRAME
         self.texture = texturas[frame]
         self.cur_texture += 1
         if self.cur_texture >= len(texturas) * UPDATES_PER_FRAME:
             self.cur_texture = 0
+
+    def update(self):
+        #Comprobamos si tiene el juego conectado
+        if not hasattr(self, "juego") or not self.juego.player_sprite:
+            return
+        
+        jugador = self.juego.player_sprite
+        
+        #Calculamos la distancia entre el jugador y el zombie
+        distancia = arcade.get_distance_between_sprites(self, jugador)
+
+        #LÓGICA DE PERSECUCIÓN
+        #Modo persecución
+        if distancia < ZOMBIE_VISION_RANGE:
+            if jugador.center_x > self.center_x:
+                self.change_x = ZOMBIE_CHASE_SPEED
+            elif jugador.center_x < self.center_x:
+                self.change_x = -ZOMBIE_CHASE_SPEED
+        else:
+            #Modo patrulla
+            if self.change_x > 0:
+                self.change_x = ZOMBIE_PATROL_SPEED
+            elif self.change_x < 0:
+                self.change_x = -ZOMBIE_PATROL_SPEED
+        

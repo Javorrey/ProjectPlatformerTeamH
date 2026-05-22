@@ -14,10 +14,6 @@ from constants import *
 from proyectile import *
 
 
-
-
-
-
 class MainMenu(arcade.View):
     def on_show_view(self):
         self.window.background_color = arcade.color.WHITE
@@ -141,7 +137,7 @@ class GameView(arcade.View):
         # -- Enemies
         enemies_layer = self.tile_map.object_lists["Enemies"]
         ENEMY_TYPES = {
-                "alien": ZombieEnemy,
+                "alien": AlienEnemy, 
                 "zombie": ZombieEnemy,
             }
         for enemy_marker in enemies_layer:
@@ -156,6 +152,8 @@ class GameView(arcade.View):
                 continue
 
             enemy = enemy_class()
+            #Pasamos el juego al enemigo para que pueda espiar al jugador
+            enemy.juego = self
 
             enemy.center_x = math.floor(
                 (coordinates[0]+1) * TILE_SCALING * self.tile_map.tile_width

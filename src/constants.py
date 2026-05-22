@@ -28,9 +28,12 @@ ASTRONAUT_PATH = BASE_DIR / "assets" / "sprites" / "astronaut"
 
 #Zombie Constants
 ZOMBIE_PATH = BASE_DIR / "assets" / "sprites" / "zombie"
+ZOMBIE_VISION_RANGE = 300
+ZOMBIE_CHASE_SPEED = 3.0
+ZOMBIE_PATROL_SPEED = 1.0
 
 #Alien Constants
-ALIEN_PATH = BASE_DIR / "assets" / "sprites" / "brain alien"
+ALIEN_PATH = BASE_DIR / "assets" / "sprites" / "brain_alien"
 
 #Projectile Constants
 PROJECTILE_PATH = BASE_DIR / "assets" / "sprites" / "proyectiles"
