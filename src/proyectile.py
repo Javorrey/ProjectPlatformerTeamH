@@ -153,6 +153,7 @@ class DisparoPrincipal(arcade.Sprite):
 
         self.texture = self.texture_list[0]
 
+        self.animation_speed = 0.1
         self.impact = False
         self.animation_frame = 0
         self.accumulatedTime = 0.0
@@ -172,9 +173,9 @@ class DisparoPrincipal(arcade.Sprite):
 
         else:
             self.accumulatedTime += delta_time
-            animation_speed = 0.1
+            
 
-            if self.accumulatedTime >= animation_speed:
+            if self.accumulatedTime >= self.animation_speed:
                 self.accumulatedTime = 0.0
                 self.animation_frame += 1
 
@@ -218,18 +219,90 @@ class DisparoPrincipal(arcade.Sprite):
             self.animation_frame = 0
             self.texture = self.texture_list[self.animation_frame]
 
+class DisparoSecundario(DisparoPrincipal):
+    def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
+        super().__init__(pos_x, pos_y, vel_x * 0.5, vel_y * 0.5, juego)
+        self.dmg = 50
+        self.scale = 2
+        self.path_or_texture = str(PROJECTILE_PATH / "Friendly Bomb 2.0.png")
+        self.texture_sheet = arcade.load_spritesheet(self.path_or_texture)
+        self.texture_list = self.texture_sheet.get_texture_grid(
+            size=(64, 64),
+            columns=2,
+            count=5
+        )
+        self.texture = self.texture_list[0]
+        self.animation_speed = 0.1
+        self.impact = False
+        self.animation_frame = 0
+        self.accumulatedTime = 0.0
+
+        angulo_radianes = math.atan2(self.change_y, self.change_x)
+        self.angle = -math.degrees(angulo_radianes)
+
+        self.radio_explosion = 150
+
+    def check_collisions(self):
+        if self.impact:
+            return
+            
+        hit_list = arcade.check_for_collision_with_lists(
+            self,
+            [
+                self.juego.scene["Enemies"],
+                self.juego.scene["walls"],
+                self.juego.scene["Platforms"],
+                self.juego.scene["Moving_Platforms"],
+                self.juego.scene["Paredes_Destructibles"]
+            ]
+        )
+
+        if hit_list:
+            # 1. Rocket Jump al jugador
+            dist_jugador = arcade.get_distance_between_sprites(self, self.juego.player_sprite)
+            if dist_jugador <= self.radio_explosion:
+                dx = self.juego.player_sprite.center_x - self.center_x
+                dy = self.juego.player_sprite.center_y - self.center_y
+                angulo_empuje = math.atan2(dy, dx)
+                fuerza = 28 
+                self.juego.player_sprite.center_y += 2
+                self.juego.player_sprite.change_y += math.sin(angulo_empuje) * fuerza
+
+            # 2. Daño a enemigos en área
+            for enemy in self.juego.scene["Enemies"]:
+                distancia = arcade.get_distance_between_sprites(self, enemy)
+                if distancia <= self.radio_explosion:
+                    enemy.health -= self.dmg
+                    if enemy.health <= 0:
+                        enemy.remove_from_sprite_lists()
+                        self.juego.score += 150
+            
+            for bloque in self.juego.scene["Paredes_Destructibles"]:
+                distancia_pared = arcade.get_distance_between_sprites(self, bloque)
+                if distancia_pared <= self.radio_explosion:
+                    bloque.health -= self.dmg  # Quita 50 de daño
+                    if bloque.health <= 0:
+                        bloque.remove_from_sprite_lists()
+                        self.juego.score += 50
+        
+            self.change_x = 0
+            self.change_y = 0
+            self.impact = True
+            arcade.play_sound(self.juego.hit_sound)
+            self.animation_frame = 0
+            self.texture = self.texture_list[self.animation_frame]
+
+
 class AlienProyectile(DisparoPrincipal):
     def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
         super().__init__(pos_x, pos_y, vel_x, vel_y, juego)
         
-        #Sobrescribimos la textura original por la del Alien
-        self.path_or_texture = str(PROJECTILE_PATH / "enemy_fire_3.0.png")
+        self.path_or_texture = str(PROJECTILE_PATH / "Enemy Fire 3.0.png")
         self.texture_sheet = arcade.load_spritesheet(self.path_or_texture)
         self.texture_list = self.texture_sheet.get_texture_grid(size=(64, 64), columns=2, count=5)
         self.texture = self.texture_list[0]
 
     def check_collisions(self):
-        #Sobrescribimos esta función para que golpee a otros enemigos
         if self.impact:
             return
             
@@ -244,7 +317,6 @@ class AlienProyectile(DisparoPrincipal):
         )
         
         if hit_list:
-            #Si choca contra la pared, iniciamos la animación de impacto
             self.change_x = 0
             self.change_y = 0
             self.impact = True

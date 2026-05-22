@@ -306,7 +306,7 @@ class GameView(arcade.View):
                 vel_y = self.velocidad_bala_y
                 
                 # Usar la clase ProyectilExplosivo
-                misil = ProyectilExplosivo(
+                misil = DisparoSecundario(
                     self.player_sprite.center_x, 
                     self.player_sprite.center_y, 
                     vel_x, 
