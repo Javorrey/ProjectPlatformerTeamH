@@ -223,7 +223,8 @@ class DisparoSecundario(DisparoPrincipal):
     def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
         super().__init__(pos_x, pos_y, vel_x * 0.5, vel_y * 0.5, juego)
         self.dmg = 50
-        self.path_or_texture = str(PROJECTILE_PATH / "Friendly Fire 2.0.png")
+        self.scale = 2
+        self.path_or_texture = str(PROJECTILE_PATH / "Friendly Bomb 2.0.png")
         self.texture_sheet = arcade.load_spritesheet(self.path_or_texture)
         self.texture_list = self.texture_sheet.get_texture_grid(
             size=(64, 64),  
@@ -241,52 +242,53 @@ class DisparoSecundario(DisparoPrincipal):
 
         self.radio_explosion = 150
 
-        def check_collisions(self):
-            if self.impact:
-                return
-            hit_list = arcade.check_for_collision_with_lists(
-                self,
-                [
-                    self.juego.scene["Enemies"],
-                    self.juego.scene["walls"],
-                    self.juego.scene["Platforms"],
-                    self.juego.scene["Moving_Platforms"],
-                    self.juego.scene["Paredes_Destructibles"]
-                    
-                ]
-            )
-            if hit_list:
-                # 1. Rocket Jump al jugador
-                dist_jugador = arcade.get_distance_between_sprites(self, self.juego.player_sprite)
-                if dist_jugador <= self.radio_explosion:
-                    dx = self.juego.player_sprite.center_x - self.center_x
-                    dy = self.juego.player_sprite.center_y - self.center_y
-                    angulo_empuje = math.atan2(dy, dx)
-                    fuerza = 28 
-                    #self.juego.player_sprite.change_x += math.cos(angulo_empuje) * fuerza/3
-                    self.juego.player_sprite.change_y += math.sin(angulo_empuje) * fuerza
-
-                # 2. Daño a enemigos en área
-                for enemy in self.juego.scene["Enemies"]:
-                    distancia = arcade.get_distance_between_sprites(self, enemy)
-                    if distancia <= self.radio_explosion:
-                        enemy.health -= self.dmg
-                        if enemy.health <= 0:
-                            enemy.remove_from_sprite_lists()
-                            self.juego.score += 150
-                    
-                for bloque in self.juego.scene["Paredes_Destructibles"]:
-                    distancia_pared = arcade.get_distance_between_sprites(self, bloque)
-                    if distancia_pared <= self.radio_explosion:
-                        bloque.health -= self.dmg  # Quita 50 de daño (el misil la rompe de 1 tiro)
-                        if bloque.health <= 0:
-                            bloque.remove_from_sprite_lists()
-                            self.juego.score += 50
+    def check_collisions(self):
+        if self.impact:
+               return
+        hit_list = arcade.check_for_collision_with_lists(
+            self,
+            [
+                self.juego.scene["Enemies"],
+                self.juego.scene["walls"],
+                self.juego.scene["Platforms"],
+                self.juego.scene["Moving_Platforms"],
+                self.juego.scene["Paredes_Destructibles"]
                 
-                self.change_x = 0
-                self.change_y = 0
-                self.impact = True
-                arcade.play_sound(self.juego.hit_sound)
-                self.animation_frame = 0
-                self.texture = self.texture_list[self.animation_frame]
+            ]
+        )
+        if hit_list:
+            # 1. Rocket Jump al jugador
+            dist_jugador = arcade.get_distance_between_sprites(self, self.juego.player_sprite)
+            if dist_jugador <= self.radio_explosion:
+                dx = self.juego.player_sprite.center_x - self.center_x
+                dy = self.juego.player_sprite.center_y - self.center_y
+                angulo_empuje = math.atan2(dy, dx)
+                fuerza = 28 
+                self.juego.player_sprite.center_y += 2
+                #self.juego.player_sprite.change_x += math.cos(angulo_empuje) * fuerza/3
+                self.juego.player_sprite.change_y += math.sin(angulo_empuje) * fuerza
+
+            # 2. Daño a enemigos en área
+            for enemy in self.juego.scene["Enemies"]:
+                distancia = arcade.get_distance_between_sprites(self, enemy)
+                if distancia <= self.radio_explosion:
+                    enemy.health -= self.dmg
+                    if enemy.health <= 0:
+                        enemy.remove_from_sprite_lists()
+                        self.juego.score += 150
+                
+            for bloque in self.juego.scene["Paredes_Destructibles"]:
+                distancia_pared = arcade.get_distance_between_sprites(self, bloque)
+                if distancia_pared <= self.radio_explosion:
+                    bloque.health -= self.dmg  # Quita 50 de daño (el misil la rompe de 1 tiro)
+                    if bloque.health <= 0:
+                        bloque.remove_from_sprite_lists()
+                        self.juego.score += 50
+            
+            self.change_x = 0
+            self.change_y = 0
+            self.impact = True
+            arcade.play_sound(self.juego.hit_sound)
+            self.animation_frame = 0
+            self.texture = self.texture_list[self.animation_frame]
 
