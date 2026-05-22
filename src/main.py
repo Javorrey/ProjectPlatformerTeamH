@@ -140,6 +140,25 @@ class GameView(arcade.View):
                 "alien": AlienEnemy, 
                 "zombie": ZombieEnemy,
             }
+     
+            
+        # Create a Platformer Physics Engine, this will handle moving our
+        # player as well as collisions between the player sprite and
+        # whatever SpriteList we specify for the walls.
+        # It is important to supply static to the walls parameter. There is a
+        # platforms parameter that is intended for moving platforms.
+        # If a platform is supposed to move, and is added to the walls list,
+        # it will not be moved.
+        
+        self.mis_paredes= [self.scene["walls"], self.scene["Platforms"], self.scene["Paredes_Destructibles"]]
+        self.physics_engine = arcade.PhysicsEnginePlatformer(
+            self.player_sprite,
+            walls=self.mis_paredes,
+            gravity_constant=GRAVITY,
+            platforms=self.scene["Moving_Platforms"],
+            
+        )
+        self.enemy_engines = []
         for enemy_marker in enemies_layer:
             coordinates = self.tile_map.get_cartesian(
                 enemy_marker.shape[0], enemy_marker.shape[1]
@@ -169,24 +188,8 @@ class GameView(arcade.View):
                 enemy.change_x = enemy_marker.properties["change_x"]
 
             self.scene.add_sprite("Enemies", enemy)
-            
-        # Create a Platformer Physics Engine, this will handle moving our
-        # player as well as collisions between the player sprite and
-        # whatever SpriteList we specify for the walls.
-        # It is important to supply static to the walls parameter. There is a
-        # platforms parameter that is intended for moving platforms.
-        # If a platform is supposed to move, and is added to the walls list,
-        # it will not be moved.
-        
-        self.mis_paredes= [self.scene["walls"], self.scene["Platforms"], self.scene["Paredes_Destructibles"]]
-        self.physics_engine = arcade.PhysicsEnginePlatformer(
-            self.player_sprite,
-            walls=self.mis_paredes,
-            gravity_constant=GRAVITY,
-            platforms=self.scene["Moving_Platforms"],
-            
-        )
-        
+            engine = arcade.PhysicsEnginePlatformer(enemy, walls=self.mis_paredes, gravity_constant=GRAVITY,)
+            self.enemy_engines.append(engine)
 
         # Initialize our camera, setting a viewport the size of our window.
         self.camera = arcade.Camera2D()
@@ -214,6 +217,8 @@ class GameView(arcade.View):
 
         # Add an empty bullet SpriteList to our scene
         self.scene.add_sprite_list("Bullets")
+        self.scene.add_sprite_list("Balas_Enemigas")
+
 
         if self.tile_map.background_color:
             self.window.background_color = self.tile_map.background_color
@@ -252,6 +257,8 @@ class GameView(arcade.View):
 
         # Move the player using our physics engine
         self.physics_engine.update()
+        for engine in self.enemy_engines:
+            engine.update()
 
         # Update our characters animation state
         if self.physics_engine.is_on_ladder():
@@ -334,24 +341,25 @@ class GameView(arcade.View):
             ]
         )
 
-        self.scene.update(delta_time, ["Enemies", "Bullets"])
+        self.scene.update(delta_time, ["Enemies", "Bullets", "Balas_Enemigas"])
 
-        # Keep enemies walking within their boundaries configured in Tiled
+        # Límites de patrulla
         for enemy in self.scene["Enemies"]:
-            if enemy.right > enemy.boundary_right and enemy.change_x > 0:
-                enemy.change_x *= -1
-            elif enemy.left < enemy.boundary_left and enemy.change_x < 0:
-                enemy.change_x *= -1
-
+            if hasattr(enemy, "boundary_right") and hasattr(enemy, "boundary_left"):
+                distancia = arcade.get_distance_between_sprites(enemy, self.player_sprite)
+                if distancia >= ZOMBIE_VISION_RANGE:  # solo en modo patrulla
+                    if enemy.right > enemy.boundary_right and enemy.change_x > 0:
+                        enemy.change_x *= -1
+                    elif enemy.left < enemy.boundary_left and enemy.change_x < 0:
+                        enemy.change_x *= -1
         
-
-        # See if we hit any coins
+        #Cosas que hacen daño
         player_collision_list = arcade.check_for_collision_with_lists(
             self.player_sprite,
             [
-                
                 self.scene["Daño"],
-                self.scene["Enemies"]
+                self.scene["Enemies"],
+                self.scene["Balas_Enemigas"]
             ]
         )
 
@@ -486,7 +494,6 @@ class GameView(arcade.View):
             self.shoot_explosivo_pressed = False
 
         self.process_keychange()
-
 
 class GameOverView(arcade.View):
     def on_show_view(self):

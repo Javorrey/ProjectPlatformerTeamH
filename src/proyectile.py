@@ -217,3 +217,37 @@ class DisparoPrincipal(arcade.Sprite):
             arcade.play_sound(self.juego.hit_sound)
             self.animation_frame = 0
             self.texture = self.texture_list[self.animation_frame]
+
+class AlienProyectile(DisparoPrincipal):
+    def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
+        super().__init__(pos_x, pos_y, vel_x, vel_y, juego)
+        
+        #Sobrescribimos la textura original por la del Alien
+        self.path_or_texture = str(PROJECTILE_PATH / "enemy_fire_3.0.png")
+        self.texture_sheet = arcade.load_spritesheet(self.path_or_texture)
+        self.texture_list = self.texture_sheet.get_texture_grid(size=(64, 64), columns=2, count=5)
+        self.texture = self.texture_list[0]
+
+    def check_collisions(self):
+        #Sobrescribimos esta función para que golpee a otros enemigos
+        if self.impact:
+            return
+            
+        hit_list = arcade.check_for_collision_with_lists(
+            self,
+            [
+                self.juego.scene["walls"],
+                self.juego.scene["Platforms"],
+                self.juego.scene["Moving_Platforms"],
+                self.juego.scene["Paredes_Destructibles"]
+            ]
+        )
+        
+        if hit_list:
+            #Si choca contra la pared, iniciamos la animación de impacto
+            self.change_x = 0
+            self.change_y = 0
+            self.impact = True
+            arcade.play_sound(self.juego.hit_sound)
+            self.animation_frame = 0
+            self.texture = self.texture_list[self.animation_frame]

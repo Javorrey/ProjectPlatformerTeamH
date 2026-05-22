@@ -1,6 +1,7 @@
 import math
 from pathlib import Path
 import arcade
+from proyectile import *
 from constants import *
 from PIL import Image
 
@@ -174,79 +175,121 @@ class Enemy(arcade.Sprite):
 class AlienEnemy(Enemy):
     def __init__(self):
         super().__init__()
+        
         self.health = 100
+
+        self.shoot_timer = 0
 
         WIDTH = 64
         HEIGHT = 64
 
         ruta_base = ALIEN_PATH
 
-        #Alien: Caminar
-        self.alien_walk_forward, self.alien_walk_forward_flipped = load_spritesheet_pair(str(ruta_base / "alien_walk_forward_2.0.png"), 1, WIDTH, HEIGHT, 1)
-        self.alien_walk_forward_up, self.alien_walk_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "alien_walk_forward_up_2.0.png"), 1, WIDTH, HEIGHT, 1)
-        self.alien_walk_forward_down, self.alien_walk_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "alien_walk_forward_down_2.0.png"), 1, WIDTH, HEIGHT, 1)
+        #Alien andando y saltando
+        self.alien_walk, self.alien_walk_flipped = load_spritesheet_pair(str(ruta_base / "alien_walk_3.0.png"), 4, WIDTH, HEIGHT, 2)
+        self.alien_jump, self.alien_jump_flipped = load_spritesheet_pair(str(ruta_base / "alien_jump_2.0.png"), 4, WIDTH, HEIGHT, 2)
+
+        #Textura inicial por defecto
+        self.texture = self.alien_walk[0]
         
     def update_animation(self, delta_time): 
         super().update_animation(delta_time)
+        
         #Variables auxiliares para facilitar la lectura
         mirando_izquierda = self.facing_direction == LEFT_FACING
-        esta_moviendose = self.change_x != 0
-
-        #Animaciones de caminar o quieto
-        if self.vertical_facing == FACE_UP_DIAGONAL:
-            if esta_moviendose:
-                texturas = self.alien_walk_forward_up_flipped if mirando_izquierda else self.alien_walk_forward_up
-            else:
-                self.cur_texture = 0
-                self.texture = self.alien_walk_forward_up_flipped[1] if mirando_izquierda else self.alien_walk_forward_up[1]
-                return
-        elif self.vertical_facing == FACE_UP:
-            if esta_moviendose:
-                texturas = self.alien_jump_forward_up_flipped if mirando_izquierda else self.alien_jump_forward_up
-            else:
-                self.cur_texture = 0
-                self.texture = self.alien_jump_forward_up_flipped[1] if mirando_izquierda else self.alien_jump_forward_up[1]
-                return
-        elif self.vertical_facing == FACE_DOWN_DIAGONAL:
-            if esta_moviendose:
-                texturas = self.alien_jump_forward_down_flipped if mirando_izquierda else self.alien_jump_forward_down
-            else:
-                self.cur_texture = 0
-                self.texture = self.alien_jump_forward_down_flipped[1] if mirando_izquierda else self.alien_jump_forward_down[1]
-                return
-        elif self.vertical_facing == FACE_DOWN:
-            if esta_moviendose:
-                texturas = self.alien_jump_forward_down_flipped if mirando_izquierda else self.alien_jump_forward_down
-            else:
-                self.cur_texture = 0
-                self.texture = self.alien_jump_forward_down_flipped[1] if mirando_izquierda else self.alien_jump_forward_down[1]
-                return
+        
+        #Elegir animación correcta
+        if self.change_y != 0:
+            #Si se está moviendo en vertical, usamos la animación de salto
+            texturas = self.alien_jump_flipped if mirando_izquierda else self.alien_jump
+        elif self.change_x != 0:
+            #Si se mueve solo en horizontal, usamos la animación de caminar
+            texturas = self.alien_walk_flipped if mirando_izquierda else self.alien_walk
         else:
-            if esta_moviendose:
-                texturas = self.alien_walk_forward_flipped if mirando_izquierda else self.alien_walk_forward
-            else:
-                self.cur_texture = 0
-                self.texture = self.alien_walk_forward_flipped[1] if mirando_izquierda else self.alien_walk_forward[1]
-                return
+            #Si está completamente quieto 
+            texturas = self.alien_walk_flipped if mirando_izquierda else self.alien_walk
+            self.cur_texture = 0
+            self.texture = texturas[0] # Usamos el primer frame como pose Idle
+            return
             
         #Avanzar al siguiente frame de animación
-        frame = self.cur_texture // UPDATES_PER_FRAME
-        self.texture = texturas[frame]
         self.cur_texture += 1
+
+        #Si llegamos al final de la animación, volvemos a empezar
         if self.cur_texture >= len(texturas) * UPDATES_PER_FRAME:
             self.cur_texture = 0
+            
+        #Asignamos la textura correspondiente calculando el frame actual
+        frame = self.cur_texture // UPDATES_PER_FRAME
+        self.texture = texturas[frame]
+
+    def update(self, delta_time):
+        #Comprobamos si tiene el juego conectado
+        if not hasattr(self, "juego") or not self.juego.player_sprite:
+            return
+
+        jugador = self.juego.player_sprite
+
+        #Calculamos la distancia entre el brain alien y el jugador
+        distancia = arcade.get_distance_between_sprites(self, jugador)
+
+        #LÓGICA DE DISPARO
+        #Modo ofensivo: detenerse y disparar
+        if distancia < ALIEN_VISION_RANGE:
+            self.change_x = 0
+            self.change_y = 0
+
+            if jugador.center_x < self.center_x:
+                self.facing_direction = LEFT_FACING
+            else:
+                self.facing_direction = RIGHT_FACING
+
+            self.shoot_timer += 1
+            if self.shoot_timer >= ALIEN_FIRE_RATE:
+                self.shoot_timer = 0
+                self.disparar(jugador)
+        else:
+            #Modo pasivo: patrulla
+            self.shoot_timer = 0 
+            self.change_y = 0    
+
+            if self.change_x == 0:
+                self.change_x = ALIEN_PATROL_SPEED
+            elif self.change_x > 0:
+                self.change_x = ALIEN_PATROL_SPEED
+            elif self.change_x < 0:
+                self.change_x = -ALIEN_PATROL_SPEED
+
+        super().update()
+
+    def disparar(self, jugador):
+        """Calcula el ángulo hacia el jugador y crea una bala"""
+
+        dx = jugador.center_x - self.center_x
+        dy = jugador.center_y - self.center_y
+        angulo = math.atan2(dy, dx)
+
+        vel_x = math.cos(angulo) * ALIEN_BULLET_SPEED
+        vel_y = math.sin(angulo) * ALIEN_BULLET_SPEED
+
+        bala_enemiga = AlienProyectile(self.center_x, self.center_y, vel_x, vel_y, self.juego)
+        bala_enemiga.angle = math.degrees(angulo) 
+
+        self.juego.scene.add_sprite("Balas_Enemigas", bala_enemiga)
 
 class ZombieEnemy(Enemy):
     def __init__(self):
         super().__init__()
+        
         self.health = 50
+        self.patrol_flip_cooldown = 0  # 
 
         WIDTH = 64
         HEIGHT = 64
 
         ruta_base = ZOMBIE_PATH
 
-        #Zombie: Caminar
+        #Texturas del zombie
         self.zombie_walk_forward, self.zombie_walk_forward_flipped = load_spritesheet_pair(str(ruta_base / "zombie_walk_forward_2.0.png"), 1, WIDTH, HEIGHT, 1)
         self.zombie_walk_forward_up, self.zombie_walk_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "zombie_walk_forward_up_2.0.png"), 1, WIDTH, HEIGHT, 1)
         self.zombie_walk_forward_down, self.zombie_walk_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "zombie_walk_forward_down_2.0.png"), 1, WIDTH, HEIGHT, 1)
@@ -302,13 +345,16 @@ class ZombieEnemy(Enemy):
         if self.cur_texture >= len(texturas) * UPDATES_PER_FRAME:
             self.cur_texture = 0
 
-    def update(self):
+    def update(self, delta_time):
         #Comprobamos si tiene el juego conectado
         if not hasattr(self, "juego") or not self.juego.player_sprite:
             return
+        #Guardamos donde nace el zombie
+        if not hasattr(self, "posicion_inicial_x"):
+            self.posicion_inicial_x = self.center_x
+            self.rango_patrulla = 45
         
         jugador = self.juego.player_sprite
-        
         #Calculamos la distancia entre el jugador y el zombie
         distancia = arcade.get_distance_between_sprites(self, jugador)
 
@@ -320,9 +366,46 @@ class ZombieEnemy(Enemy):
             elif jugador.center_x < self.center_x:
                 self.change_x = -ZOMBIE_CHASE_SPEED
         else:
-            #Modo patrulla
-            if self.change_x > 0:
+            # Modo patrulla
+            if self.change_x == 0:
                 self.change_x = ZOMBIE_PATROL_SPEED
-            elif self.change_x < 0:
-                self.change_x = -ZOMBIE_PATROL_SPEED
+
+        super().update()
+        self.comprobar_colisiones()
+
+    def comprobar_colisiones(self):
+        
+        #Colisión con los pinchos
+        pinchos_tocados = arcade.check_for_collision_with_list(self, self.juego.scene["Daño"])
+        if pinchos_tocados:
+            #El zombi muere al pisar la trampa!
+            self.remove_from_sprite_lists()
+            return 
+
+        #Colisión con el escenario (Paredes, plataformas, etc)
+        listas_escenario = [
+            self.juego.scene["walls"],
+            self.juego.scene["Platforms"],
+            self.juego.scene["Paredes_Destructibles"]
+        ]
+        obstaculos_tocados = arcade.check_for_collision_with_lists(self, listas_escenario)
+
+
+        # Revisamos todos los obstáculos que está tocando
+        for muro in obstaculos_tocados:
+            #Si el obstáculo está por debajo de sus pies, es el suelo
+            if self.bottom >= muro.top - 10:
+                continue # Pasa al siguiente obstáculo sin hacer nada
+            #Muro real: rebotar
+            if self.change_x > 0: 
+                self.right = muro.left 
+                self.change_x = -ZOMBIE_PATROL_SPEED 
+            elif self.change_x < 0: 
+                self.left = muro.right 
+                self.change_x = ZOMBIE_PATROL_SPEED 
+                
+            self.posicion_inicial_x = self.center_x
+            
+            #Rompemos el bucle porque ya hemos rebotado
+            break
         
