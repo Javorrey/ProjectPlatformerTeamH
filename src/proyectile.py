@@ -22,10 +22,10 @@ class ProyectilBase(arcade.Sprite):
         angulo_radianes = math.atan2(self.change_y, self.change_x)
         self.angle = -math.degrees(angulo_radianes)
 
-    def update(self, *args, **kwargs):
+    def update(self, delta_time, *args, **kwargs):
         # Si más adelante quieres balas que caigan con gravedad 
         # o que persigan al jugador, la lógica iría aquí.
-        super().update(*args, **kwargs)
+        super().update(delta_time, *args, **kwargs)
         self.comprobar_colisiones()
 
     def comprobar_colisiones(self):
@@ -163,7 +163,7 @@ class DisparoPrincipal(arcade.Sprite):
 
     def update(self, delta_time: float, *args, **kwargs):
         if not self.impact:
-            super().update(*args, **kwargs)
+            super().update(delta_time, *args, **kwargs)
             self.check_collisions()
 
             if (self.right < 0) or (self.left > self.juego.end_of_map):
@@ -323,3 +323,7 @@ class AlienProyectile(DisparoPrincipal):
             arcade.play_sound(self.juego.hit_sound)
             self.animation_frame = 0
             self.texture = self.texture_list[self.animation_frame]
+
+        player_hit = arcade.check_for_collision(self, self.juego.player_sprite)
+        if player_hit:
+            self.remove_from_sprite_lists()

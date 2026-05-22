@@ -272,10 +272,11 @@ class AlienEnemy(Enemy):
         vel_x = math.cos(angulo) * ALIEN_BULLET_SPEED
         vel_y = math.sin(angulo) * ALIEN_BULLET_SPEED
 
-        bala_enemiga = AlienProyectile(self.center_x, self.center_y, vel_x, vel_y, self.juego)
-        bala_enemiga.angle = math.degrees(angulo) 
-
-        self.juego.scene.add_sprite("Balas_Enemigas", bala_enemiga)
+        MAX_BALAS = 20
+        if len(self.juego.scene["Balas_Enemigas"]) < MAX_BALAS:
+            bala_enemiga = AlienProyectile(self.center_x, self.center_y, vel_x, vel_y, self.juego)
+            bala_enemiga.angle = math.degrees(angulo)
+            self.juego.scene.add_sprite("Balas_Enemigas", bala_enemiga)
 
 class ZombieEnemy(Enemy):
     def __init__(self):
