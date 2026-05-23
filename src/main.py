@@ -3,6 +3,7 @@ Platformer Game.
 
 Basado en el tutorial de arcade: https://arcade.academy/examples/platform_tutorial.html#platform-tutorial
 """
+from itertools import count
 import math
 
 from pathlib import Path
@@ -12,6 +13,16 @@ import arcade
 from character import *
 from constants import *
 from proyectile import *
+ 
+def preload_assets(route, columnas, cantidad):
+    path_or_texture = str(PROJECTILE_PATH / route)
+    texture_sheet = arcade.load_spritesheet(path_or_texture)
+    texture_list = texture_sheet.get_texture_grid(
+        size=(64, 64),  
+        columns=columnas,      
+        count=cantidad         
+    )
+    return texture_list
 
 
 class MainMenu(arcade.View):
@@ -102,6 +113,11 @@ class GameView(arcade.View):
         self.hit_sound = arcade.load_sound(":resources:sounds/hit5.wav")
 
         self.physics_engine = None 
+
+        #Load Sprites
+        self.primaryFire_texture_list = preload_assets("Friendly Fire 2.0.png", 2, 5)
+        self.secondaryFire_texture_list = preload_assets("Friendly Bomb 2.0.png", 2, 5)
+        self.enemy_bullet_texture_list = preload_assets("enemy_fire_3.0.png", 2, 5)
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
@@ -286,7 +302,8 @@ class GameView(arcade.View):
                     self.player_sprite.center_y - 4, 
                     vel_x, 
                     vel_y,
-                    self
+                    self,
+                    self.primaryFire_texture_list
                 )
 
                 self.scene.add_sprite("Bullets", bullet)
@@ -311,7 +328,8 @@ class GameView(arcade.View):
                     self.player_sprite.center_y, 
                     vel_x, 
                     vel_y,
-                    self
+                    self,
+                    self.secondaryFire_texture_list
                 )
                 
                 self.scene.add_sprite("Bullets", misil)

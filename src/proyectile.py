@@ -133,7 +133,7 @@ class ProyectilExplosivo(ProyectilBase):
 
 
 class DisparoPrincipal(arcade.Sprite):
-    def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
+    def __init__(self, pos_x, pos_y, vel_x, vel_y, juego, sprite):
         super().__init__()
         self.center_x = pos_x
         self.center_y = pos_y
@@ -142,13 +142,7 @@ class DisparoPrincipal(arcade.Sprite):
         self.dmg = 25
         self.juego = juego
 
-        self.path_or_texture = str(PROJECTILE_PATH / "Friendly Fire 2.0.png")
-        self.texture_sheet = arcade.load_spritesheet(self.path_or_texture)
-        self.texture_list = self.texture_sheet.get_texture_grid(
-            size=(64, 64),  
-            columns=2,      
-            count=5         
-        )
+        self.texture_list = sprite
         #print(len(self.texture_list))
 
         self.texture = self.texture_list[0]
@@ -220,17 +214,11 @@ class DisparoPrincipal(arcade.Sprite):
             self.texture = self.texture_list[self.animation_frame]
 
 class DisparoSecundario(DisparoPrincipal):
-    def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
-        super().__init__(pos_x, pos_y, vel_x * 0.5, vel_y * 0.5, juego)
+    def __init__(self, pos_x, pos_y, vel_x, vel_y, juego, sprite):
+        super().__init__(pos_x, pos_y, vel_x * 0.5, vel_y * 0.5, juego, sprite)
         self.dmg = 50
         self.scale = 2
-        self.path_or_texture = str(PROJECTILE_PATH / "Friendly Bomb 2.0.png")
-        self.texture_sheet = arcade.load_spritesheet(self.path_or_texture)
-        self.texture_list = self.texture_sheet.get_texture_grid(
-            size=(64, 64),
-            columns=2,
-            count=5
-        )
+        self.texture_list = sprite
         self.texture = self.texture_list[0]
         self.animation_speed = 0.1
         self.impact = False
@@ -294,12 +282,10 @@ class DisparoSecundario(DisparoPrincipal):
 
 
 class AlienProyectile(DisparoPrincipal):
-    def __init__(self, pos_x, pos_y, vel_x, vel_y, juego):
-        super().__init__(pos_x, pos_y, vel_x, vel_y, juego)
+    def __init__(self, pos_x, pos_y, vel_x, vel_y, juego, sprite):
+        super().__init__(pos_x, pos_y, vel_x, vel_y, juego, sprite)
         
-        self.path_or_texture = str(PROJECTILE_PATH / "Enemy Fire 3.0.png")
-        self.texture_sheet = arcade.load_spritesheet(self.path_or_texture)
-        self.texture_list = self.texture_sheet.get_texture_grid(size=(64, 64), columns=2, count=5)
+        self.texture_list = sprite       
         self.texture = self.texture_list[0]
 
     def check_collisions(self):
