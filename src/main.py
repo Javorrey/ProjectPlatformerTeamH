@@ -207,6 +207,8 @@ class GameView(arcade.View):
             engine = arcade.PhysicsEnginePlatformer(enemy, walls=self.mis_paredes, gravity_constant=GRAVITY,)
             self.enemy_engines.append(engine)
 
+        self.enemigos_cercanos = set()
+
         # Initialize our camera, setting a viewport the size of our window.
         self.camera = arcade.Camera2D()
 
@@ -273,8 +275,20 @@ class GameView(arcade.View):
 
         # Move the player using our physics engine
         self.physics_engine.update()
+
+        #Búsqueda espacial para todos los enemigos
+        self.enemigos_cercanos = set()
+        RADIO_ACTIVACION = 1500 
+        for enemy in self.scene["Enemies"]:
+            dx = enemy.center_x - self.player_sprite.center_x
+            dy = enemy.center_y - self.player_sprite.center_y
+            if (dx*dx + dy*dy) <= (RADIO_ACTIVACION ** 2):
+                self.enemigos_cercanos.add(enemy)
+
+        #Físicas de los enemigos cercanos
         for engine in self.enemy_engines:
-            engine.update()
+            if engine.player_sprite in self.enemigos_cercanos:
+                engine.update()
 
         # Update our characters animation state
         if self.physics_engine.is_on_ladder():
@@ -395,7 +409,6 @@ class GameView(arcade.View):
                 self.score_text.text = f"Score: {self.score}"
         #metodo que centra la camara en base a la posicion del player
         self.center_camera_to_player()
-
 
     def center_camera_to_player(self):
         #si pos x es menor que la mitad del ancho , no se mueve

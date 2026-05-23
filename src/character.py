@@ -230,12 +230,9 @@ class AlienEnemy(Enemy):
 
         jugador = self.juego.player_sprite
 
-        #Calculamos la distancia entre el brain alien y el jugador
-        distancia = arcade.get_distance_between_sprites(self, jugador)
-
         #LÓGICA DE DISPARO
         #Modo ofensivo: detenerse y disparar
-        if distancia < ALIEN_VISION_RANGE:
+        if self in self.juego.enemigos_cercanos:
             self.change_x = 0
             self.change_y = 0
 
@@ -274,7 +271,7 @@ class AlienEnemy(Enemy):
 
         MAX_BALAS = 20
         if len(self.juego.scene["Balas_Enemigas"]) < MAX_BALAS:
-            bala_enemiga = AlienProyectile(self.center_x, self.center_y, vel_x, vel_y, self.juego)
+            bala_enemiga = AlienProyectile(self.center_x, self.center_y, vel_x, vel_y, self.juego, self.juego.enemy_bullet_texture_list)
             bala_enemiga.angle = math.degrees(angulo)
             self.juego.scene.add_sprite("Balas_Enemigas", bala_enemiga)
 
@@ -295,6 +292,9 @@ class ZombieEnemy(Enemy):
         self.zombie_walk_forward_up, self.zombie_walk_forward_up_flipped = load_spritesheet_pair(str(ruta_base / "zombie_walk_forward_up_2.0.png"), 1, WIDTH, HEIGHT, 1)
         self.zombie_walk_forward_down, self.zombie_walk_forward_down_flipped = load_spritesheet_pair(str(ruta_base / "zombie_walk_forward_down_2.0.png"), 1, WIDTH, HEIGHT, 1)
 
+        #Dirección inicial de patrulla
+        self.patrol_direction = ZOMBIE_PATROL_SPEED
+
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
         
@@ -308,35 +308,35 @@ class ZombieEnemy(Enemy):
                 texturas = self.zombie_walk_forward_up_flipped if mirando_izquierda else self.zombie_walk_forward_up
             else:
                 self.cur_texture = 0
-                self.texture = self.zombie_walk_forward_up_flipped[1] if mirando_izquierda else self.zombie_walk_forward_up[1]
+                self.texture = self.zombie_walk_forward_up_flipped[0] if mirando_izquierda else self.zombie_walk_forward_up[0]
                 return
         elif self.vertical_facing == FACE_UP:
             if esta_moviendose:
                 texturas = self.zombie_walk_forward_up_flipped if mirando_izquierda else self.zombie_walk_forward_up
             else:
                 self.cur_texture = 0
-                self.texture = self.zombie_walk_forward_up_flipped[1] if mirando_izquierda else self.zombie_walk_forward_up[1]
+                self.texture = self.zombie_walk_forward_up_flipped[0] if mirando_izquierda else self.zombie_walk_forward_up[0]
                 return
         elif self.vertical_facing == FACE_DOWN_DIAGONAL:
             if esta_moviendose:
                 texturas = self.zombie_walk_forward_down_flipped if mirando_izquierda else self.zombie_walk_forward_down
             else:
                 self.cur_texture = 0
-                self.texture = self.zombie_walk_forward_down_flipped[1] if mirando_izquierda else self.zombie_walk_forward_down[1]
+                self.texture = self.zombie_walk_forward_down_flipped[0] if mirando_izquierda else self.zombie_walk_forward_down[0]
                 return
         elif self.vertical_facing == FACE_DOWN:
             if esta_moviendose:
                 texturas = self.zombie_walk_forward_down_flipped if mirando_izquierda else self.zombie_walk_forward_down
             else:
                 self.cur_texture = 0
-                self.texture = self.zombie_walk_forward_down_flipped[1] if mirando_izquierda else self.zombie_walk_forward_down[1]
+                self.texture = self.zombie_walk_forward_down_flipped[0] if mirando_izquierda else self.zombie_walk_forward_down[0]
                 return
         else:
             if esta_moviendose:
                 texturas = self.zombie_walk_forward_flipped if mirando_izquierda else self.zombie_walk_forward
             else:
                 self.cur_texture = 0
-                self.texture = self.zombie_walk_forward_flipped[1] if mirando_izquierda else self.zombie_walk_forward[1]
+                self.texture = self.zombie_walk_forward_flipped[0] if mirando_izquierda else self.zombie_walk_forward[0]
                 return
             
         #Avanzar al siguiente frame de animación
@@ -347,66 +347,50 @@ class ZombieEnemy(Enemy):
             self.cur_texture = 0
 
     def update(self, delta_time):
-        #Comprobamos si tiene el juego conectado
+        # 0. Chequeo de seguridad y optimización
         if not hasattr(self, "juego") or not self.juego.player_sprite:
             return
-        #Guardamos donde nace el zombie
+            
+        if self not in self.juego.enemigos_cercanos:
+            self.change_x = 0
+            self.change_y = 0
+            return 
+            
+        # 1. Configurar la correa por si te olvidas de ponerla en Tiled
         if not hasattr(self, "posicion_inicial_x"):
             self.posicion_inicial_x = self.center_x
-            self.rango_patrulla = 45
-        
+            self.rango_patrulla = 45 
+
         jugador = self.juego.player_sprite
-        #Calculamos la distancia entre el jugador y el zombie
         distancia = arcade.get_distance_between_sprites(self, jugador)
 
-        #LÓGICA DE PERSECUCIÓN
-        #Modo persecución
+        # 2. Comprobar trampas
+        pinchos_tocados = arcade.check_for_collision_with_list(self, self.juego.scene["Daño"])
+        if pinchos_tocados:
+            self.remove_from_sprite_lists()
+            return 
+
+        # 3. Lógica de comportamiento
         if distancia < ZOMBIE_VISION_RANGE:
+            # --- MODO PERSECUCIÓN ---
             if jugador.center_x > self.center_x:
                 self.change_x = ZOMBIE_CHASE_SPEED
             elif jugador.center_x < self.center_x:
                 self.change_x = -ZOMBIE_CHASE_SPEED
         else:
-            # Modo patrulla
-            if self.change_x == 0:
-                self.change_x = ZOMBIE_PATROL_SPEED
+            # --- MODO PATRULLA ---
+            # ¿Tiene límites configurados desde Tiled?
+            if hasattr(self, "boundary_right") and hasattr(self, "boundary_left"):
+                if self.right > self.boundary_right:
+                    self.patrol_direction = -ZOMBIE_PATROL_SPEED
+                elif self.left < self.boundary_left:
+                    self.patrol_direction = ZOMBIE_PATROL_SPEED
+            else:
+                # Si no tiene límites de Tiled, usa la matemática
+                if self.center_x > self.posicion_inicial_x + self.rango_patrulla:
+                    self.patrol_direction = -ZOMBIE_PATROL_SPEED
+                elif self.center_x < self.posicion_inicial_x - self.rango_patrulla:
+                    self.patrol_direction = ZOMBIE_PATROL_SPEED
 
-        super().update()
-        self.comprobar_colisiones()
-
-    def comprobar_colisiones(self):
-        
-        #Colisión con los pinchos
-        pinchos_tocados = arcade.check_for_collision_with_list(self, self.juego.scene["Daño"])
-        if pinchos_tocados:
-            #El zombi muere al pisar la trampa!
-            self.remove_from_sprite_lists()
-            return 
-
-        #Colisión con el escenario (Paredes, plataformas, etc)
-        listas_escenario = [
-            self.juego.scene["walls"],
-            self.juego.scene["Platforms"],
-            self.juego.scene["Paredes_Destructibles"]
-        ]
-        obstaculos_tocados = arcade.check_for_collision_with_lists(self, listas_escenario)
-
-
-        # Revisamos todos los obstáculos que está tocando
-        for muro in obstaculos_tocados:
-            #Si el obstáculo está por debajo de sus pies, es el suelo
-            if self.bottom >= muro.top - 10:
-                continue # Pasa al siguiente obstáculo sin hacer nada
-            #Muro real: rebotar
-            if self.change_x > 0: 
-                self.right = muro.left 
-                self.change_x = -ZOMBIE_PATROL_SPEED 
-            elif self.change_x < 0: 
-                self.left = muro.right 
-                self.change_x = ZOMBIE_PATROL_SPEED 
-                
-            self.posicion_inicial_x = self.center_x
-            
-            #Rompemos el bucle porque ya hemos rebotado
-            break
-        
+            self.change_x = self.patrol_direction
+    
