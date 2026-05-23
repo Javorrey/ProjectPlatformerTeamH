@@ -347,7 +347,7 @@ class ZombieEnemy(Enemy):
             self.cur_texture = 0
 
     def update(self, delta_time):
-        # 0. Chequeo de seguridad y optimización
+        #Chequeo de seguridad y optimización
         if not hasattr(self, "juego") or not self.juego.player_sprite:
             return
             
@@ -356,7 +356,7 @@ class ZombieEnemy(Enemy):
             self.change_y = 0
             return 
             
-        # 1. Configurar la correa por si te olvidas de ponerla en Tiled
+        #Configurar la correa 
         if not hasattr(self, "posicion_inicial_x"):
             self.posicion_inicial_x = self.center_x
             self.rango_patrulla = 45 
@@ -364,13 +364,13 @@ class ZombieEnemy(Enemy):
         jugador = self.juego.player_sprite
         distancia = arcade.get_distance_between_sprites(self, jugador)
 
-        # 2. Comprobar trampas
+        #Comprobar trampas
         pinchos_tocados = arcade.check_for_collision_with_list(self, self.juego.scene["Daño"])
         if pinchos_tocados:
             self.remove_from_sprite_lists()
             return 
 
-        # 3. Lógica de comportamiento
+        #Lógica de comportamiento
         if distancia < ZOMBIE_VISION_RANGE:
             # --- MODO PERSECUCIÓN ---
             if jugador.center_x > self.center_x:
@@ -379,14 +379,12 @@ class ZombieEnemy(Enemy):
                 self.change_x = -ZOMBIE_CHASE_SPEED
         else:
             # --- MODO PATRULLA ---
-            # ¿Tiene límites configurados desde Tiled?
             if hasattr(self, "boundary_right") and hasattr(self, "boundary_left"):
                 if self.right > self.boundary_right:
                     self.patrol_direction = -ZOMBIE_PATROL_SPEED
                 elif self.left < self.boundary_left:
                     self.patrol_direction = ZOMBIE_PATROL_SPEED
             else:
-                # Si no tiene límites de Tiled, usa la matemática
                 if self.center_x > self.posicion_inicial_x + self.rango_patrulla:
                     self.patrol_direction = -ZOMBIE_PATROL_SPEED
                 elif self.center_x < self.posicion_inicial_x - self.rango_patrulla:
