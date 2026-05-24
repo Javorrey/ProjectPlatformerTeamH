@@ -118,6 +118,14 @@ class GameView(arcade.View):
         self.primaryFire_texture_list = preload_assets("Friendly Fire 2.0.png", 2, 5)
         self.secondaryFire_texture_list = preload_assets("Friendly Bomb 2.0.png", 2, 5)
         self.enemy_bullet_texture_list = preload_assets("enemy_fire_3.0.png", 2, 5)
+        self.secondaryFireCharge_texture_list = preload_assets("Charging (1).png", 3, 10)
+        
+
+        self.gui_sprites = arcade.SpriteList()
+        self.secondaryFireChargeSprite = arcade.Sprite(self.secondaryFireCharge_texture_list[8])
+        self.secondaryFireChargeSprite.right = WINDOW_WIDTH - 30
+        self.secondaryFireChargeSprite.bottom = 30
+        self.gui_sprites.append(self.secondaryFireChargeSprite)
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
@@ -269,6 +277,17 @@ class GameView(arcade.View):
 
         # Draw our Score
         self.score_text.draw()
+
+        #Draw secondary fire charge status
+        if self.can_shoot_explosivo:
+            self.secondaryFireChargeSprite.texture = self.secondaryFireCharge_texture_list[8]
+        else:
+            self.secondaryFireChargeSprite.texture = self.secondaryFireCharge_texture_list[0]
+        self.gui_sprites.draw()
+        
+
+
+        
 
     def on_update(self, delta_time):
         """Movement and Game Logic"""
