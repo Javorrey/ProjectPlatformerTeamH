@@ -154,7 +154,7 @@ class GameView(arcade.View):
         # -- Enemies
         enemies_layer = self.tile_map.object_lists["Enemies"]
         ENEMY_TYPES = {
-                "alien": AlienEnemy, 
+                "alien": ZombieEnemy, 
                 "zombie": ZombieEnemy,
             }
      
@@ -425,7 +425,7 @@ class GameView(arcade.View):
                 self.score +=75
                 self.score_text.text= f"Score: {self.score}"               
               
-            elif objeto.properties["type"] == "Portal":
+            elif objeto.properties["type"] == "portal":
                 if self.pieza_recogida:
                     game_over = GameOverView()
                     self.window.show_view(game_over)
