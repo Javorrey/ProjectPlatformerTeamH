@@ -152,7 +152,7 @@ class GameView(arcade.View):
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
         #Daño que soporta una pared de este layer
         for bloque in self.scene["Paredes_Destructibles"]:
-            bloque.health= 150
+            bloque.health= 50
 
         self.player_sprite = PlayerCharacter()
         self.player_sprite.center_x = 128
