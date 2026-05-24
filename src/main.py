@@ -142,6 +142,7 @@ class GameView(arcade.View):
 
         # Create our Scene Based on the TileMap
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
+        #Daño que soporta una pared de este layer
         for bloque in self.scene["Paredes_Destructibles"]:
             bloque.health= 150
 
@@ -214,7 +215,7 @@ class GameView(arcade.View):
 
         # Initialize our gui camera, initial settings are the same as our world camera.
         self.gui_camera = arcade.Camera2D()
-
+        self.score=0
         # Reset the score if we should
         if self.reset_score:
             self.score = 0
@@ -236,6 +237,8 @@ class GameView(arcade.View):
         # Add an empty bullet SpriteList to our scene
         self.scene.add_sprite_list("Bullets")
         self.scene.add_sprite_list("Balas_Enemigas")
+        # Comprobar si el jugador cogió la pieza
+        self.pieza_recogida= False
 
 
         if self.tile_map.background_color:
@@ -384,14 +387,14 @@ class GameView(arcade.View):
                         enemy.change_x *= -1
                     elif enemy.left < enemy.boundary_left and enemy.change_x < 0:
                         enemy.change_x *= -1
-        
         #Cosas que hacen daño
         player_collision_list = arcade.check_for_collision_with_lists(
             self.player_sprite,
             [
                 self.scene["Daño"],
                 self.scene["Enemies"],
-                self.scene["Balas_Enemigas"]
+                self.scene["Balas_Enemigas"],
+                
             ]
         )
 
@@ -407,6 +410,29 @@ class GameView(arcade.View):
                 arcade.play_sound(self.collect_coin_sound)
                 self.score += 75
                 self.score_text.text = f"Score: {self.score}"
+            
+        colisiones_obj= arcade.check_for_collision_with_list(
+            self.player_sprite,
+            self.scene["Items"]
+        )
+
+        for objeto in colisiones_obj:
+            if objeto.properties["type"] == "pieza":
+                objeto.remove_from_sprite_lists()
+                objeto.kill()
+                arcade.play_sound(self.collect_coin_sound)
+                self.pieza_recogida= True
+                self.score +=75
+                self.score_text.text= f"Score: {self.score}"               
+              
+            elif objeto.properties["type"] == "Portal":
+                if self.pieza_recogida:
+                    game_over = GameOverView()
+                    self.window.show_view(game_over)
+                    return
+                else:
+                    pass
+                    
         #metodo que centra la camara en base a la posicion del player
         self.center_camera_to_player()
 
