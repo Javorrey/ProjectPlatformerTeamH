@@ -11,14 +11,14 @@ COIN_SCALING = 0.5
 
 # Movement speed of player, in pixels per frame
 PLAYER_MOVEMENT_SPEED = 5
-GRAVITY = 1
-PLAYER_JUMP_SPEED = 20
+GRAVITY = 0.5
+PLAYER_JUMP_SPEED = 14.14
 
 #Constants used to track the direction a character is facing
 RIGHT_FACING = 0
 LEFT_FACING = 1
 
-CURRENT_MAP = "nivel1.tmj"
+CURRENT_MAP = "nivel2.tmj"
 BASE_DIR = Path(__file__).resolve().parent.parent
 MAP_FILE = BASE_DIR / "assets" / "maps" / CURRENT_MAP
 

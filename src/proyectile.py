@@ -252,7 +252,7 @@ class DisparoSecundario(DisparoPrincipal):
                 dx = self.juego.player_sprite.center_x - self.center_x
                 dy = self.juego.player_sprite.center_y - self.center_y
                 angulo_empuje = math.atan2(dy, dx)
-                fuerza = 28 
+                fuerza = 20 
                 self.juego.player_sprite.center_y += 2
                 self.juego.player_sprite.change_y += math.sin(angulo_empuje) * fuerza
 

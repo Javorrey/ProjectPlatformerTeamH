@@ -162,7 +162,7 @@ class GameView(arcade.View):
         # -- Enemies
         enemies_layer = self.tile_map.object_lists["Enemies"]
         ENEMY_TYPES = {
-                "alien": ZombieEnemy, 
+                "alien": AlienEnemy, 
                 "zombie": ZombieEnemy,
             }
      
@@ -300,7 +300,7 @@ class GameView(arcade.View):
 
         #Búsqueda espacial para todos los enemigos
         self.enemigos_cercanos = set()
-        RADIO_ACTIVACION = 1500 
+        RADIO_ACTIVACION = 2000 
         for enemy in self.scene["Enemies"]:
             dx = enemy.center_x - self.player_sprite.center_x
             dy = enemy.center_y - self.player_sprite.center_y
@@ -334,7 +334,7 @@ class GameView(arcade.View):
                 
                 # Usar la nueva clase LaserAzul
                 bullet = DisparoPrincipal(
-                    self.player_sprite.center_x - 16, 
+                    self.player_sprite.center_x - 12, 
                     self.player_sprite.center_y - 4, 
                     vel_x, 
                     vel_y,
@@ -360,8 +360,8 @@ class GameView(arcade.View):
                 
                 # Usar la clase ProyectilExplosivo
                 misil = DisparoSecundario(
-                    self.player_sprite.center_x, 
-                    self.player_sprite.center_y, 
+                    self.player_sprite.center_x - 12, 
+                    self.player_sprite.center_y - 4, 
                     vel_x, 
                     vel_y,
                     self,
