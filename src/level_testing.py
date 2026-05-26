@@ -127,6 +127,12 @@ class GameView(arcade.View):
         self.secondaryFireChargeSprite.bottom = 30
         self.gui_sprites.append(self.secondaryFireChargeSprite)
 
+        ruta_musica = str(BASE_DIR / "assets" / "music" / "Phase Shift.mp3")
+        self.musica_fondo = arcade.load_sound(ruta_musica)
+        self.reproductor_musica = None
+
+
+
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
         layer_options = {
@@ -252,6 +258,10 @@ class GameView(arcade.View):
             self.window.background_color = self.tile_map.background_color
         else:
             self.window.background_color = arcade.color.CORNFLOWER_BLUE
+
+        if self.reproductor_musica is not None:
+            self.reproductor_musica.pause()
+        self.reproductor_musica = arcade.play_sound(self.musica_fondo, volume=0.3, loop=True)
 
     def on_show_view(self):
         self.setup()
@@ -418,6 +428,8 @@ class GameView(arcade.View):
 
         for collision in player_collision_list:
             if self.scene["Enemies"] in collision.sprite_lists or self.scene["Daño"] in collision.sprite_lists:
+                if self.reproductor_musica:
+                    self.reproductor_musica.pause()
                 arcade.play_sound(self.gameover_sound)
                 game_over = GameOverView()
                 self.window.show_view(game_over)
