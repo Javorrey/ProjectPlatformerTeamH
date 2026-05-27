@@ -12,6 +12,7 @@ import arcade
 
 from character import *
 from constants import *
+import constants as cts
 from proyectile import *
  
 def preload_assets(route, columnas, cantidad):
@@ -134,6 +135,7 @@ class GameView(arcade.View):
 
 
     def setup(self):
+        cts.TEST_LEVEL = True
         """Set up the game here. Call this function to restart the game."""
         layer_options = {
             "Platforms": {
@@ -264,7 +266,13 @@ class GameView(arcade.View):
         self.reproductor_musica = arcade.play_sound(self.musica_fondo, volume=0.3, loop=True)
 
     def on_show_view(self):
-        self.setup()
+        #self.setup()
+        if cts.TEST_LEVEL == False:
+            self.setup()
+        else:
+            if self.reproductor_musica is not None:
+                self.reproductor_musica.play()  
+    
 
     def on_draw(self):
         """Render the screen."""
@@ -533,7 +541,9 @@ class GameView(arcade.View):
         """Called whenever a key is pressed."""
 
         if key == arcade.key.ESCAPE:
-            self.setup()
+            self.reproductor_musica.pause()
+            pause_view = PauseView(self)
+            self.window.show_view(pause_view)
 
         if key == arcade.key.UP or key == arcade.key.W:
             if self.velocidad_bala_x == 0 and self.velocidad_bala_y == 12:
@@ -600,6 +610,64 @@ class GameOverView(arcade.View):
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         game_view = GameView()
         self.window.show_view(game_view)
+
+class PauseView(arcade.View):
+    def __init__(self, game_view):
+        super().__init__()
+        # Guardamos el estado exacto del juego para poder volver a él
+        self.game_view = game_view
+
+    def on_draw(self):
+        self.clear()
+        
+        # 1. Dibujamos el juego congelado de fondo
+        self.game_view.on_draw()
+
+        # 2. Activamos la cámara de la interfaz para dibujar sobre toda la pantalla
+        self.game_view.gui_camera.use()
+
+        # 3. Dibujamos un rectángulo negro semitransparente para oscurecer el juego
+        arcade.draw_lrbt_rectangle_filled(
+            left=0, right=WINDOW_WIDTH, top=WINDOW_HEIGHT, bottom=0,
+            color=(0, 0, 0, 150) # El 150 es el nivel de transparencia (Alpha)
+        )
+
+        # 4. Dibujamos los textos
+        arcade.draw_text(
+            "JUEGO EN PAUSA",
+            WINDOW_WIDTH // 2,
+            WINDOW_HEIGHT // 2 + 30,
+            arcade.color.WHITE,
+            font_size=50,
+            anchor_x="center"
+        )
+        arcade.draw_text(
+            "Presiona ESC para continuar",
+            WINDOW_WIDTH // 2,
+            WINDOW_HEIGHT // 2 - 30,
+            arcade.color.LIGHT_GRAY,
+            font_size=20,
+            anchor_x="center"
+        )
+        arcade.draw_text(
+            "Presiona ENTER para salir al Menú Principal",
+            WINDOW_WIDTH // 2,
+            WINDOW_HEIGHT // 2 - 70,
+            arcade.color.LIGHT_GRAY,
+            font_size=15,
+            anchor_x="center"
+        )
+
+    def on_key_press(self, key, modifiers):
+        # Si presiona ESC, restauramos la vista del juego
+        if key == arcade.key.ESCAPE:
+            self.window.show_view(self.game_view)
+            
+        # Si presiona ENTER, destruimos el juego y volvemos al inicio
+        elif key == arcade.key.ENTER:
+            cts.TEST_LEVEL = False
+            menu_view = MainMenu()
+            self.window.show_view(menu_view)
 
 def main():
     """Main function"""

@@ -41,3 +41,6 @@ ALIEN_FIRE_RATE = 90
 
 #Projectile Constants
 PROJECTILE_PATH = BASE_DIR / "assets" / "sprites" / "proyectiles"
+
+#Flags
+TEST_LEVEL = False
