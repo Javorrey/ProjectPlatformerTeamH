@@ -48,9 +48,11 @@ class GameOver(arcade.View):
         if len(botones_pulsados) > 0:
             boton_clicado = botones_pulsados[0]
 
-            #if boton_clicado == self.boton_volver_a_jugar:
+            if boton_clicado == self.boton_volver_a_jugar:
+                vista_juego = self.window.GameViewClass()
+                self.window.show_view(vista_juego)
         
-            if boton_clicado == self.boton_ir_al_menu:
+            elif boton_clicado == self.boton_ir_al_menu:
                 proxima_vista = self.window.MainMenuClass()
                 self.window.show_view(proxima_vista)
 

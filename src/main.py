@@ -18,6 +18,8 @@ from mainMenu import mainMenu
 from niveles import VistaNiveles
 from ajustes import VistaAjustes
 
+from gameOver import GameOver
+
 def preload_assets(route, columnas, cantidad):
     path_or_texture = str(PROJECTILE_PATH / route)
     texture_sheet = arcade.load_spritesheet(path_or_texture)
@@ -405,7 +407,7 @@ class GameView(arcade.View):
         for collision in player_collision_list:
             if self.scene["Enemies"] in collision.sprite_lists or self.scene["Daño"] in collision.sprite_lists:
                 arcade.play_sound(self.gameover_sound)
-                game_over = GameOverView()
+                game_over = GameOver()
                 self.window.show_view(game_over)
                 return
             else:
@@ -431,7 +433,7 @@ class GameView(arcade.View):
               
             elif objeto.properties["type"] == "portal":
                 if self.pieza_recogida:
-                    game_over = GameOverView()
+                    game_over = GameOver()
                     self.window.show_view(game_over)
                     return
                 else:
@@ -556,25 +558,6 @@ class GameView(arcade.View):
 
         self.process_keychange()
 
-class GameOverView(arcade.View):
-    def on_show_view(self):
-        self.window.background_color = arcade.color.BLACK
-
-    def on_draw(self):
-        self.clear()
-        arcade.draw_text(
-            "Game Over - Click to Restart",
-            WINDOW_WIDTH // 2,
-            WINDOW_HEIGHT // 2,
-            arcade.color.WHITE,
-            30,
-            anchor_x="center"
-        )
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = GameView()
-        self.window.show_view(game_view)
-
 def main():
     """Main function"""
     window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
@@ -586,7 +569,6 @@ def main():
     menu_view = mainMenu()
     window.show_view(menu_view)
     arcade.run()
-
 
 if __name__ == "__main__":
 
