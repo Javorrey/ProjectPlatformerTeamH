@@ -91,7 +91,10 @@ class GameView(arcade.View):
         self.timer_explosivo = 0.0
         self.COOLDOWN_EXPLOSIVO = 3.0
 
-        # Load sounds
+        #Load font
+        arcade.load_font(str(BASE_DIR / "assets" / "fonts" / "fuente_menu.ttf"))
+
+        #Load sounds
         self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
         self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
         self.gameover_sound = arcade.load_sound(":resources:sounds/gameover1.wav")
@@ -284,10 +287,6 @@ class GameView(arcade.View):
         else:
             self.secondaryFireChargeSprite.texture = self.secondaryFireCharge_texture_list[0]
         self.gui_sprites.draw()
-        
-
-
-        
 
     def on_update(self, delta_time):
         """Movement and Game Logic"""
@@ -587,41 +586,48 @@ class PauseView(arcade.View):
     def on_draw(self):
         self.clear()
         
-        # 1. Dibujamos el juego congelado de fondo
+        #Dibujamos el juego congelado de fondo
         self.game_view.on_draw()
 
-        # 2. Activamos la cámara de la interfaz para dibujar sobre toda la pantalla
+        #Activamos la cámara de la interfaz para dibujar sobre toda la pantalla
         self.game_view.gui_camera.use()
 
-        # 3. Dibujamos un rectángulo negro semitransparente para oscurecer el juego
+        #Ancho y alto de la pantalla actual
+        ancho = self.window.width
+        alto = self.window.height
+
+        #Dibujamos un rectángulo negro semitransparente para oscurecer el juego
         arcade.draw_lrbt_rectangle_filled(
-            left=0, right=WINDOW_WIDTH, top=WINDOW_HEIGHT, bottom=0,
+            left=0, right=ancho, top=alto, bottom=0,
             color=(0, 0, 0, 150) # El 150 es el nivel de transparencia (Alpha)
         )
 
-        # 4. Dibujamos los textos
+        #Dibujamos los textos
         arcade.draw_text(
             "JUEGO EN PAUSA",
-            WINDOW_WIDTH // 2,
-            WINDOW_HEIGHT // 2 + 30,
-            arcade.color.WHITE,
+            ancho // 2,
+            alto // 2 + 30,
+            arcade.color.ORANGE_PEEL,
             font_size=50,
+            font_name="Upheaval TT (BRK)",
             anchor_x="center"
         )
         arcade.draw_text(
             "Presiona ESC para continuar",
-            WINDOW_WIDTH // 2,
-            WINDOW_HEIGHT // 2 - 30,
+            ancho // 2,
+            alto // 2 - 30,
             arcade.color.LIGHT_GRAY,
             font_size=20,
+            font_name="Upheaval TT (BRK)",
             anchor_x="center"
         )
         arcade.draw_text(
             "Presiona ENTER para salir al Menú Principal",
-            WINDOW_WIDTH // 2,
-            WINDOW_HEIGHT // 2 - 70,
+            ancho // 2,
+            alto // 2 - 70,
             arcade.color.LIGHT_GRAY,
             font_size=15,
+            font_name="Upheaval TT (BRK)",
             anchor_x="center"
         )
 
@@ -635,7 +641,6 @@ class PauseView(arcade.View):
             cts.PLAYING_LEVEL = False
             menu_view = mainMenu()
             self.window.show_view(menu_view)
-
 
 def main():
     """Main function"""
