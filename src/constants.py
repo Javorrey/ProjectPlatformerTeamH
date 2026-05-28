@@ -20,6 +20,8 @@ RIGHT_FACING = 0
 LEFT_FACING = 1
 
 #Maps Constants
+CURRENT_MAP = "nivel5.tmj"
+MAP_FILE = BASE_DIR / "assets" / "maps" / CURRENT_MAP
 MAPS_DIR = BASE_DIR / "assets" / "maps"
 
 def obtener_ruta_mapa(numero_nivel):
