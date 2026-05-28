@@ -170,7 +170,7 @@ class GameView(arcade.View):
         # -- Enemies
         enemies_layer = self.tile_map.object_lists["Enemies"]
         ENEMY_TYPES = {
-                "alien": ZombieEnemy, 
+                "alien": AlienEnemy, 
                 "zombie": ZombieEnemy,
             }
      

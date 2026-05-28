@@ -49,5 +49,5 @@ ALIEN_FIRE_RATE = 90
 PROJECTILE_PATH = BASE_DIR / "assets" / "sprites" / "proyectiles"
 
 #Flags
-TEST_LEVEL = False
+PLAYING_LEVEL = False
 
