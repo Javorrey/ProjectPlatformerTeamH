@@ -465,6 +465,7 @@ class GameView(arcade.View):
               
             elif objeto.properties["type"] == "portal":
                 if self.pieza_recogida:
+                    self.reproductor_musica.pause()
                     game_over = GameOverView()
                     self.window.show_view(game_over)
                     return
@@ -595,6 +596,7 @@ class GameView(arcade.View):
 class GameOverView(arcade.View):
     def on_show_view(self):
         self.window.background_color = arcade.color.BLACK
+        cts.TEST_LEVEL = False
 
     def on_draw(self):
         self.clear()
