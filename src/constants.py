@@ -4,6 +4,7 @@ from pathlib import Path
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Platformer"
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 #Constants used to scale our sprites from their original size
 TILE_SCALING = 1
@@ -18,9 +19,12 @@ PLAYER_JUMP_SPEED = 14.14
 RIGHT_FACING = 0
 LEFT_FACING = 1
 
-CURRENT_MAP = "nivel5.tmj"
-BASE_DIR = Path(__file__).resolve().parent.parent
-MAP_FILE = BASE_DIR / "assets" / "maps" / CURRENT_MAP
+#Maps Constants
+MAPS_DIR = BASE_DIR / "assets" / "maps"
+
+def obtener_ruta_mapa(numero_nivel):
+    """Devuelve la ruta absoluta del nivel solicitado"""
+    return MAPS_DIR / f"nivel{numero_nivel}.tmj"
 
 #Astronaut Constants
 CHARACTER_SCALING = 1.5
@@ -44,3 +48,4 @@ PROJECTILE_PATH = BASE_DIR / "assets" / "sprites" / "proyectiles"
 
 #Flags
 TEST_LEVEL = False
+

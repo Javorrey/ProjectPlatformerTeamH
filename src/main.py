@@ -13,7 +13,11 @@ import arcade
 from character import *
 from constants import *
 from proyectile import *
- 
+
+from mainMenu import mainMenu
+from niveles import VistaNiveles
+from ajustes import VistaAjustes
+
 def preload_assets(route, columnas, cantidad):
     path_or_texture = str(PROJECTILE_PATH / route)
     texture_sheet = arcade.load_spritesheet(path_or_texture)
@@ -23,27 +27,6 @@ def preload_assets(route, columnas, cantidad):
         count=cantidad         
     )
     return texture_list
-
-
-class MainMenu(arcade.View):
-    def on_show_view(self):
-        self.window.background_color = arcade.color.WHITE
-
-    def on_draw(self):
-        self.clear()
-        arcade.draw_text(
-            "Main Menu - Click To Play",
-            WINDOW_WIDTH // 2,
-            WINDOW_HEIGHT // 2,
-            arcade.color.BLACK,
-            font_size=30,
-            anchor_x="center"
-        )
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = GameView()
-        self.window.show_view(game_view)
-
 
 class GameView(arcade.View):
     """
@@ -141,9 +124,11 @@ class GameView(arcade.View):
             }
         }
 
-        # Load our TileMap
+        #CARGA DEL NIVEL SELECCIONADO
+        ruta_mapa = obtener_ruta_mapa(self.window.nivel_seleccionado)
+
         self.tile_map = arcade.load_tilemap(
-            MAP_FILE,
+            ruta_mapa,
             scaling=TILE_SCALING,
             layer_options=layer_options,
         )
@@ -593,7 +578,12 @@ class GameOverView(arcade.View):
 def main():
     """Main function"""
     window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
-    menu_view = MainMenu()
+    
+    window.MainMenuClass = mainMenu
+    window.GameViewClass = GameView
+    window.nivel_seleccionado = 1
+
+    menu_view = mainMenu()
     window.show_view(menu_view)
     arcade.run()
 

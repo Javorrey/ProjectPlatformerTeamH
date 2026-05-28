@@ -70,29 +70,9 @@ class mainMenu(arcade.View):
         if len(botones_pulsados) > 0:
             boton_clicado = botones_pulsados[0]
 
-            #Cuando se hagan los niveles se termina esto
             if boton_clicado == self.boton_jugar:
-                pass
-                """
-                if self.window.nivel_seleccionado == 1:
-                    vista_juego = 
-                    self.window.show_view(vista_juego)
-
-                if self.window.nivel_seleccionado == 2:
-                    vista_juego = 
-                    self.window.show_view(vista_juego)
-
-                if self.window.nivel_seleccionado == 3:
-                    vista_juego = 
-                    self.window.show_view(vista_juego)
-
-                if self.window.nivel_seleccionado == 4:
-                    vista_juego = 
-                    self.window.show_view(vista_juego)
-
-                if self.window.nivel_seleccionado == 5:
-                    vista_juego = 
-                    self.window.show_view(vista_juego)"""
+                vista_juego = self.window.GameViewClass()
+                self.window.show_view(vista_juego)
 
             if boton_clicado == self.boton_nivel:
                 proxima_vista = VistaNiveles()
