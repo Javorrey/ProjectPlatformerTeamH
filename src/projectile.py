@@ -2,6 +2,8 @@ import math
 from pathlib import Path
 import arcade
 from constants import *
+import constants as cts
+from gameOver import GameOver
 
 class ProyectilBase(arcade.Sprite):
     def __init__(self, pos_x, pos_y, vel_x, vel_y, imagen, escala, dmg, juego):
@@ -313,3 +315,13 @@ class AlienProyectile(DisparoPrincipal):
         player_hit = arcade.check_for_collision(self, self.juego.player_sprite)
         if player_hit:
             self.remove_from_sprite_lists()
+            if self.juego.reproductor_musica:
+                self.juego.reproductor_musica.pause()
+
+            cts.PLAYING_LEVEL = False
+
+            arcade.play_sound(self.juego.gameover_sound)
+
+            game_over = GameOver()
+
+            self.juego.window.show_view(game_over)

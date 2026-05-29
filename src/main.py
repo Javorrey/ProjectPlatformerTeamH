@@ -13,7 +13,7 @@ import arcade
 from character import *
 from constants import *
 import constants as cts
-from proyectile import *
+from projectile import *
 
 from mainMenu import mainMenu
 from niveles import VistaNiveles
@@ -192,7 +192,7 @@ class GameView(arcade.View):
                 continue
 
             enemy = enemy_class()
-            #Pasamos el juego al enemigo para que pueda espiar al jugador
+            #Pasar el juego al enemigo para que pueda "ver" al jugador
             enemy.juego = self
 
             enemy.center_x = math.floor(
@@ -251,7 +251,10 @@ class GameView(arcade.View):
             self.window.background_color = arcade.color.CORNFLOWER_BLUE
         if self.reproductor_musica is not None:
             self.reproductor_musica.pause()
+
+
         self.reproductor_musica = arcade.play_sound(self.musica_fondo, volume=0.3, loop=True)
+
 
     def on_show_view(self):
         if cts.PLAYING_LEVEL == False:
@@ -405,33 +408,45 @@ class GameView(arcade.View):
                         enemy.change_x *= -1
                     elif enemy.left < enemy.boundary_left and enemy.change_x < 0:
                         enemy.change_x *= -1
-        #Cosas que hacen daño
-        player_collision_list = arcade.check_for_collision_with_lists(
+        
+        # ---------------- COLISIONES MORTALES ----------------
+
+        # Colisión con enemigos
+        enemigos_collision = arcade.check_for_collision_with_list(
             self.player_sprite,
-            [
-                self.scene["Daño"],
-                self.scene["Enemies"],
-                self.scene["Balas_Enemigas"],
-                
-            ]
+            self.scene["Enemies"]
         )
 
-        for collision in player_collision_list:
-            if self.scene["Enemies"] in collision.sprite_lists or self.scene["Daño"] in collision.sprite_lists:
-                if self.reproductor_musica:
-                    self.reproductor_musica.pause()
-                    cts.PLAYING_LEVEL = False
-                arcade.play_sound(self.gameover_sound)
-                game_over = GameOver()
-                self.window.show_view(game_over)
-                return
-            else:
-                # Our collision is a coin, remove it
-                collision.remove_from_sprite_lists()
-                arcade.play_sound(self.collect_coin_sound)
-                self.score += 75
-                self.score_text.text = f"Score: {self.score}"
-            
+        # Colisión con zonas de daño
+        danio_collision = arcade.check_for_collision_with_list(
+            self.player_sprite,
+            self.scene["Daño"]
+        )
+
+        # Colisión con balas enemigas
+        balas_collision = arcade.check_for_collision_with_list(
+            self.player_sprite,
+            self.scene["Balas_Enemigas"]
+        )
+
+        # Si toca cualquiera de las tres cosas -> muere
+        if enemigos_collision or danio_collision or balas_collision:
+
+            # Eliminar balas enemigas que impactaron
+            for bala in balas_collision:
+                bala.remove_from_sprite_lists()
+
+            if self.reproductor_musica:
+                self.reproductor_musica.pause()
+
+            cts.PLAYING_LEVEL = False
+
+            arcade.play_sound(self.gameover_sound)
+
+            game_over = GameOver()
+            self.window.show_view(game_over)
+
+            return  
         colisiones_obj= arcade.check_for_collision_with_list(
             self.player_sprite,
             self.scene["Items"]
