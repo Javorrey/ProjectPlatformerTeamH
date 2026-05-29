@@ -13,7 +13,7 @@ import arcade
 from character import *
 from constants import *
 import constants as cts
-from proyectile import *
+from projectile import *
  
 def preload_assets(route, columnas, cantidad):
     path_or_texture = str(PROJECTILE_PATH / route)

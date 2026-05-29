@@ -13,7 +13,7 @@ import arcade
 from character import *
 from constants import *
 import constants as cts
-from proyectile import *
+from projectile import *
 
 from mainMenu import mainMenu
 from niveles import VistaNiveles
@@ -192,7 +192,7 @@ class GameView(arcade.View):
                 continue
 
             enemy = enemy_class()
-            #Pasamos el juego al enemigo para que pueda espiar al jugador
+            #Pasar el juego al enemigo para que pueda "ver" al jugador
             enemy.juego = self
 
             enemy.center_x = math.floor(
@@ -251,7 +251,10 @@ class GameView(arcade.View):
             self.window.background_color = arcade.color.CORNFLOWER_BLUE
         if self.reproductor_musica is not None:
             self.reproductor_musica.pause()
+
+
         self.reproductor_musica = arcade.play_sound(self.musica_fondo, volume=0.3, loop=True)
+
 
     def on_show_view(self):
         if cts.PLAYING_LEVEL == False:

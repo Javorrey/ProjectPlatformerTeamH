@@ -1,7 +1,7 @@
 import math
 from pathlib import Path
 import arcade
-from proyectile import *
+from projectile import *
 from constants import *
 from PIL import Image
 
@@ -177,7 +177,7 @@ class AlienEnemy(Enemy):
         super().__init__()
         
         self.health = 100
-
+        self.scale = 2
         self.shoot_timer = 0
 
         WIDTH = 64
@@ -271,7 +271,7 @@ class AlienEnemy(Enemy):
 
         MAX_BALAS = 20
         if len(self.juego.scene["Balas_Enemigas"]) < MAX_BALAS:
-            bala_enemiga = AlienProyectile(self.center_x, self.center_y, vel_x, vel_y, self.juego, self.juego.enemy_bullet_texture_list)
+            bala_enemiga = AlienProyectile(self.center_x, self.center_y + 12, vel_x, vel_y, self.juego, self.juego.enemy_bullet_texture_list)
             bala_enemiga.angle = math.degrees(angulo)
             self.juego.scene.add_sprite("Balas_Enemigas", bala_enemiga)
 
