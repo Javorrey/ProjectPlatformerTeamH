@@ -170,7 +170,12 @@ class VistaAjustes(arcade.View):
         #Guardamos el volumen en la ventana para que sea persistente y no se pierda
         self.window.volumen_musica = self.volumen_musica
 
-        #Aplicamos el volumen al reproductor de forma segura solo si la partida existe
+        #Controlar la musica del menú
+        if hasattr(self.window, "reproductor_menu") and self.window.reproductor_menu is not None:
+            # Asignamos el volumen DIRECTAMENTE al reproductor
+            self.window.reproductor_menu.volume = self.volumen_musica
+
+        #Comprobar la musica del juego
         if hasattr(self.window, "game_view") and self.window.game_view is not None:
             game_view = self.window.game_view
             

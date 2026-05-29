@@ -35,13 +35,23 @@ class mainMenu(arcade.View):
         self.lista_botones.append(self.boton_salir)
         self.lista_mando.append(self.boton_controles)
 
-        ruta_musica_menu = str(BASE_DIR / "assets" / "music" / "Mythical Axiom.mp3")
-        self.musica_fondo = arcade.load_sound(ruta_musica_menu)
-        self.reproductor_musica = None
-
     def on_show_view(self):
-        if self.reproductor_musica is not None:
-                self.reproductor_musica.play()
+        #Si no hay música sonando, la cargamos y la encendemos por primera vez
+        if not hasattr(self.window, "reproductor_menu") or self.window.reproductor_menu is None:
+            
+            ruta_musica_menu = str(BASE_DIR / "assets" / "music" / "Mythical Axiom.mp3")
+            self.window.musica_menu = arcade.load_sound(ruta_musica_menu)
+            
+            volumen_actual = getattr(self.window, "volumen_musica", 0.7)
+            
+            self.window.reproductor_menu = self.window.musica_menu.play(
+                volume=volumen_actual, 
+                loop=True
+            )
+            
+        #Si ya existía, nos aseguramos de que siga sonando
+        else:
+            self.window.reproductor_menu.play()
 
         centro_x = self.window.width / 2
         alto = self.window.height
@@ -91,7 +101,11 @@ class mainMenu(arcade.View):
             boton_clicado = botones_pulsados[0]
 
             if boton_clicado == self.boton_jugar:
-                self.reproductor_musica.pause()
+                if hasattr(self.window, "reproductor_menu") and self.window.reproductor_menu is not None:
+                    # Detenemos el sonido de la ventana
+                    arcade.stop_sound(self.window.reproductor_menu)
+                    self.window.reproductor_menu = None
+                    
                 vista_juego = self.window.GameViewClass()
                 self.window.show_view(vista_juego)
 
