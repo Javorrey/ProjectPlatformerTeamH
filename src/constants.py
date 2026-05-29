@@ -42,8 +42,8 @@ ZOMBIE_PATROL_SPEED = 1.0
 ALIEN_PATH = BASE_DIR / "assets" / "sprites" / "brainAlien"
 ALIEN_VISION_RANGE = 50
 ALIEN_PATROL_SPEED = 1.5
-ALIEN_BULLET_SPEED = 0.5
-ALIEN_FIRE_RATE = 90
+ALIEN_BULLET_SPEED = 1.0
+ALIEN_FIRE_RATE = 200
 
 #Projectile Constants
 PROJECTILE_PATH = BASE_DIR / "assets" / "sprites" / "proyectiles"
