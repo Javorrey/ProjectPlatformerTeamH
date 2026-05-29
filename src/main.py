@@ -120,6 +120,8 @@ class GameView(arcade.View):
         self.musica_fondo = arcade.load_sound(ruta_musica)
         self.reproductor_musica = None
 
+        self.window.game_view = self
+
     def setup(self):
         cts.PLAYING_LEVEL = True
         """Set up the game here. Call this function to restart the game."""
@@ -252,9 +254,9 @@ class GameView(arcade.View):
         if self.reproductor_musica is not None:
             self.reproductor_musica.pause()
 
+        volumen_actual = getattr(self.window, "volumen_musica", 0.7)
 
-        self.reproductor_musica = arcade.play_sound(self.musica_fondo, volume=0.3, loop=True)
-
+        self.reproductor_musica = arcade.play_sound(self.musica_fondo, volume=volumen_actual, loop=True)
 
     def on_show_view(self):
         if cts.PLAYING_LEVEL == False:
@@ -664,6 +666,8 @@ def main():
     window.MainMenuClass = mainMenu
     window.GameViewClass = GameView
     window.nivel_seleccionado = 1
+    
+    window.volumen_musica = 0.7
 
     menu_view = mainMenu()
     window.show_view(menu_view)
