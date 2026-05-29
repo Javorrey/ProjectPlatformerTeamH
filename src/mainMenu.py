@@ -35,7 +35,14 @@ class mainMenu(arcade.View):
         self.lista_botones.append(self.boton_salir)
         self.lista_mando.append(self.boton_controles)
 
+        ruta_musica_menu = str(BASE_DIR / "assets" / "music" / "Mythical Axiom.mp3")
+        self.musica_fondo = arcade.load_sound(ruta_musica_menu)
+        self.reproductor_musica = None
+
     def on_show_view(self):
+        if self.reproductor_musica is not None:
+                self.reproductor_musica.play()
+
         centro_x = self.window.width / 2
         alto = self.window.height
         ancho = self.window.width
@@ -54,6 +61,9 @@ class mainMenu(arcade.View):
 
         self.boton_controles.center_x = ancho - 50
         self.boton_controles.center_y = alto - 50
+
+    def setup(self):
+        self.reproductor_musica = arcade.play_sound(self.musica_fondo, volume=0.2, loop=True)
 
     def on_draw(self):
         self.clear()
@@ -81,6 +91,7 @@ class mainMenu(arcade.View):
             boton_clicado = botones_pulsados[0]
 
             if boton_clicado == self.boton_jugar:
+                self.reproductor_musica.pause()
                 vista_juego = self.window.GameViewClass()
                 self.window.show_view(vista_juego)
 
@@ -137,5 +148,6 @@ if __name__ == '__main__':
     #ventana.volumen_seleccionado = 0.7  terminar cuando elijamos musica
 
     vista_menu = mainMenu()
+    vista_menu.setup()
     ventana.show_view(vista_menu)
     arcade.run()
