@@ -44,6 +44,8 @@ class VistaAjustes(arcade.View):
 
         self.boton_atras.center_x = 50
         self.boton_atras.center_y = alto - 50
+
+        self.volumen_musica = self.window.volumen_musica
       
     def on_draw(self):
         self.clear()
@@ -164,6 +166,22 @@ class VistaAjustes(arcade.View):
         posicion_relativa = raton_x - self.slider_x
         nuevo_volumen = posicion_relativa / self.slider_ancho
         self.volumen_musica = max(0.0, min(1.0, nuevo_volumen))
+
+        #Guardamos el volumen en la ventana para que sea persistente y no se pierda
+        self.window.volumen_musica = self.volumen_musica
+
+        #Controlar la musica del menú
+        if hasattr(self.window, "reproductor_menu") and self.window.reproductor_menu is not None:
+            # Asignamos el volumen DIRECTAMENTE al reproductor
+            self.window.reproductor_menu.volume = self.volumen_musica
+
+        #Comprobar la musica del juego
+        if hasattr(self.window, "game_view") and self.window.game_view is not None:
+            game_view = self.window.game_view
+            
+            # Comprobamos que el juego tenga las variables de música creadas
+            if hasattr(game_view, "reproductor_musica") and game_view.reproductor_musica is not None:
+                game_view.musica_fondo.set_volume(self.volumen_musica, game_view.reproductor_musica)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """

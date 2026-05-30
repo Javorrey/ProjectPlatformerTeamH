@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 #Constants
@@ -40,10 +41,10 @@ ZOMBIE_PATROL_SPEED = 1.0
 
 #Alien Constants
 ALIEN_PATH = BASE_DIR / "assets" / "sprites" / "brainAlien"
-ALIEN_VISION_RANGE = 100
+ALIEN_VISION_RANGE = 30
 ALIEN_PATROL_SPEED = 1.5
 ALIEN_BULLET_SPEED = 1.0
-ALIEN_FIRE_RATE = 90
+ALIEN_FIRE_RATE = 500
 
 #Projectile Constants
 PROJECTILE_PATH = BASE_DIR / "assets" / "sprites" / "proyectiles"
@@ -51,3 +52,16 @@ PROJECTILE_PATH = BASE_DIR / "assets" / "sprites" / "proyectiles"
 #Flags
 PLAYING_LEVEL = False
 
+#Guardado nivel y puntos
+SAVE_FILE = Path("savegame.json")
+
+DATOS_INICIALES = {
+    "nivel_desbloqueado": 1,
+    "puntuaciones": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+    }
+}

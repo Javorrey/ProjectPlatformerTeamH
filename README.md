@@ -1,14 +1,18 @@
-# tdv-platform
+Bienvenido a Artemis 67!!
 
-Plantilla para desarrollar el proyecto de la asignatura "Tecnología de Videojuegos" de la UAH.
+Este es un juego donde se controla a un astronauta de la expedición Artemis 67 para encontrar los horrores de marte y escapar del planeta.
 
-Git no permite mantener directorios vacíos dentro del repositorio. Para una mejor organización del proyecto, los archivos de recursos deberían estar separados por tipo, por ejemplo:
+Creado por:
 
-- assets/maps
-- assets/music
-- assets/sound
-- assets/enemies
+Javier Otriz Álvarez
+Dylam Jym Nolasco Vargas
+Hugo Flor Retamal
+Carlos Écija López
+John Michael Crossley Díaz
 
-El archivo README.md (este mismo archivo) debe contener las instrucciones del juego de cara a la entrega del proyecto.
+Para ejecutar el juego:
 
-¡Disfrutad del proyecto!
+- Se tiene que tener Python 3 instalado
+- Se debe instalar la libreria Arcade en la terminal con: pip install arcade o python3 -m pip install arcade
+- Se debe entrar a la carpeta src escribiendo en la terminal cd src
+- Para ejecutar el juego, se escribe python main.py

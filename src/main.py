@@ -21,6 +21,8 @@ from ajustes import VistaAjustes
 
 from gameOver import GameOver
 
+import serializacion
+
 def preload_assets(route, columnas, cantidad):
     path_or_texture = str(PROJECTILE_PATH / route)
     texture_sheet = arcade.load_spritesheet(path_or_texture)
@@ -119,6 +121,8 @@ class GameView(arcade.View):
         ruta_musica = str(BASE_DIR / "assets" / "music" / "Phase Shift.mp3")
         self.musica_fondo = arcade.load_sound(ruta_musica)
         self.reproductor_musica = None
+
+        self.window.game_view = self
 
     def setup(self):
         cts.PLAYING_LEVEL = True
@@ -280,9 +284,9 @@ class GameView(arcade.View):
         if self.reproductor_musica is not None:
             self.reproductor_musica.pause()
 
+        volumen_actual = getattr(self.window, "volumen_musica", 0.7)
 
-        self.reproductor_musica = arcade.play_sound(self.musica_fondo, volume=0.3, loop=True)
-
+        self.reproductor_musica = arcade.play_sound(self.musica_fondo, volume=volumen_actual, loop=True)
 
     def on_show_view(self):
         if cts.PLAYING_LEVEL == False:
@@ -491,6 +495,19 @@ class GameView(arcade.View):
               
             elif objeto.properties["type"] == "portal":
                 if self.pieza_recogida:
+                    datos = self.window.datos_guardados
+
+                    nivel_actual = self.window.nivel_seleccionado
+                    #Mejor puntuacion
+                    if self.score > datos["puntuaciones"][str(nivel_actual)]:
+                        datos["puntuaciones"][str(nivel_actual)] = self.score
+                    # Desbloquear siguiente nivel
+                    if nivel_actual >= datos["nivel_desbloqueado"]:
+                        if nivel_actual < 5: # Solo hay 5 niveles, no queremos que intente desbloquear el 6
+                            datos["nivel_desbloqueado"] = nivel_actual + 1
+
+                    serializacion.guardar_datos(datos)
+
                     self.reproductor_musica.pause()
                     cts.PLAYING_LEVEL = False
                     game_over = GameOver()
@@ -701,7 +718,12 @@ def main():
     
     window.MainMenuClass = mainMenu
     window.GameViewClass = GameView
-    window.nivel_seleccionado = 1
+    datos = serializacion.cargar_datos()
+
+    window.nivel_seleccionado = datos["nivel_desbloqueado"]
+    window.datos_guardados = datos
+    
+    window.volumen_musica = 0.7
 
     menu_view = mainMenu()
     window.show_view(menu_view)
