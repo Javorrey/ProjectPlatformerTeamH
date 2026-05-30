@@ -110,11 +110,11 @@ class GameView(arcade.View):
         self.secondaryFire_texture_list = preload_assets("Friendly Bomb 2.0.png", 2, 5)
         self.enemy_bullet_texture_list = preload_assets("enemy_fire_3.0.png", 2, 5)
         self.secondaryFireCharge_texture_list = preload_assets("Charging (1).png", 3, 10)
-        
+        factor_escala=self.window.width/1280
 
         self.gui_sprites = arcade.SpriteList()
         self.secondaryFireChargeSprite = arcade.Sprite(self.secondaryFireCharge_texture_list[8])
-        self.secondaryFireChargeSprite.right = WINDOW_WIDTH - 30
+        self.secondaryFireChargeSprite.right = WINDOW_WIDTH*factor_escala - 30
         self.secondaryFireChargeSprite.bottom = 30
         self.gui_sprites.append(self.secondaryFireChargeSprite)
 
