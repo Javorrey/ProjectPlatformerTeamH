@@ -21,6 +21,8 @@ from ajustes import VistaAjustes
 
 from gameOver import GameOver
 
+import serializacion
+
 def preload_assets(route, columnas, cantidad):
     path_or_texture = str(PROJECTILE_PATH / route)
     texture_sheet = arcade.load_spritesheet(path_or_texture)
@@ -465,6 +467,18 @@ class GameView(arcade.View):
               
             elif objeto.properties["type"] == "portal":
                 if self.pieza_recogida:
+                    datos = self.window.datos_guardados
+
+                    nivel_actual = self.window.nivel_seleccionado
+
+                    if self.score > datos["puntuaciones"][str(nivel_actual)]:
+                        datos["puntuaciones"][str(nivel_actual)] = self.score
+
+                    if nivel_actual >= datos["nivel_desbloqueado"]:
+                        datos["nivel_desbloqueado"] = nivel_actual + 1
+
+                    serializacion.guardar_datos(datos)
+
                     self.reproductor_musica.pause()
                     cts.PLAYING_LEVEL = False
                     game_over = GameOver()
@@ -665,7 +679,10 @@ def main():
     
     window.MainMenuClass = mainMenu
     window.GameViewClass = GameView
-    window.nivel_seleccionado = 1
+    datos = serializacion.cargar_datos()
+
+    window.nivel_seleccionado = datos["nivel_desbloqueado"]
+    window.datos_guardados = datos
     
     window.volumen_musica = 0.7
 
