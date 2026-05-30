@@ -470,12 +470,13 @@ class GameView(arcade.View):
                     datos = self.window.datos_guardados
 
                     nivel_actual = self.window.nivel_seleccionado
-
+                    #Mejor puntuacion
                     if self.score > datos["puntuaciones"][str(nivel_actual)]:
                         datos["puntuaciones"][str(nivel_actual)] = self.score
-
+                    # Desbloquear siguiente nivel
                     if nivel_actual >= datos["nivel_desbloqueado"]:
-                        datos["nivel_desbloqueado"] = nivel_actual + 1
+                        if nivel_actual < 5: # Solo hay 5 niveles, no queremos que intente desbloquear el 6
+                            datos["nivel_desbloqueado"] = nivel_actual + 1
 
                     serializacion.guardar_datos(datos)
 
