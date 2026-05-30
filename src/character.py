@@ -178,7 +178,7 @@ class AlienEnemy(Enemy):
         super().__init__()
         
         self.health = 100
-        self.scale = 2
+        self.scale = ALIEN_SCALE
         self.shoot_timer = 0
 
         WIDTH = 64
@@ -281,7 +281,8 @@ class ZombieEnemy(Enemy):
         super().__init__()
         
         self.health = 50
-        self.patrol_flip_cooldown = 0  # 
+        self.patrol_flip_cooldown = 0  
+        self.scale = ZOMBIE_SCALE 
 
         WIDTH = 64
         HEIGHT = 64
