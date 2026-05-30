@@ -401,6 +401,9 @@ class GameView(arcade.View):
                     self,
                     self.secondaryFire_texture_list
                 )
+                factor_escala=self.window.width/1280
+                cts.SECONDARY_SHOOT_SCALE= SECONDARY_SHOOT_SCALE* factor_escala
+                misil.scale=cts.SECONDARY_SHOOT_SCALE
                 
                 self.scene.add_sprite("Bullets", misil)
                 

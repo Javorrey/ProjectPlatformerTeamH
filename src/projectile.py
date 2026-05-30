@@ -164,7 +164,7 @@ class DisparoPrincipal(arcade.Sprite):
 
             if (self.right < 0) or (self.left > self.juego.end_of_map):
                 self.remove_from_sprite_lists()
-            if (self.bottom < 0) or (self.top > self.juego.top_of_map):
+            if (self.bottom < 0) or (self.top > self.juego.top_of_map ):
                 self.remove_from_sprite_lists()
 
         else:
@@ -219,7 +219,7 @@ class DisparoSecundario(DisparoPrincipal):
     def __init__(self, pos_x, pos_y, vel_x, vel_y, juego, sprite):
         super().__init__(pos_x, pos_y, vel_x * 0.5, vel_y * 0.5, juego, sprite)
         self.dmg = 50
-        self.scale = 2
+        self.scale = SECONDARY_SHOOT_SCALE
         self.texture_list = sprite
         self.texture = self.texture_list[0]
         self.animation_speed = 0.1

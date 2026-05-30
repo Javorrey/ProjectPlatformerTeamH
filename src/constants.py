@@ -15,6 +15,8 @@ COIN_SCALING = 0.5
 PLAYER_MOVEMENT_SPEED = 5
 GRAVITY = 0.5
 PLAYER_JUMP_SPEED = 14.14
+#Secondary shoot
+SECONDARY_SHOOT_SCALE=2
 
 #Constants used to track the direction a character is facing
 RIGHT_FACING = 0
