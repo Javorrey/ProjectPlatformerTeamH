@@ -2,7 +2,7 @@ from pathlib import Path
 
 #Constants
 WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 720
+WINDOW_HEIGHT = 768
 WINDOW_TITLE = "Platformer"
 BASE_DIR = Path(__file__).resolve().parent.parent
 

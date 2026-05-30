@@ -61,7 +61,7 @@ class ProyectilBase(arcade.Sprite):
             arcade.play_sound(self.juego.hit_sound)
 
         # Destruir si sale del mapa
-        if (self.right < 0) or (self.left > self.juego.end_of_map):
+        if (self.right < 0) or (self.left > self.juego.end_of_map)or(self.top<0)or(self.bottom>self.juego.top_of_map):
             self.remove_from_sprite_lists()
 
         
@@ -164,7 +164,7 @@ class DisparoPrincipal(arcade.Sprite):
 
             if (self.right < 0) or (self.left > self.juego.end_of_map):
                 self.remove_from_sprite_lists()
-            if (self.bottom < 0) or (self.top > self.juego.tile_map.height * self.juego.tile_map.tile_height):
+            if (self.bottom < 0) or (self.top > self.juego.top_of_map):
                 self.remove_from_sprite_lists()
 
         else:

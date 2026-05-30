@@ -137,20 +137,44 @@ class GameView(arcade.View):
 
         #CARGA DEL NIVEL SELECCIONADO
         ruta_mapa = obtener_ruta_mapa(self.window.nivel_seleccionado)
+        #escala todo en base al tamaño de la pantalla
+        factor_escala=self.window.width/1280
+        cts.TILE_SCALING = TILE_SCALING * factor_escala
+        cts.CHARACTER_SCALING = CHARACTER_SCALING* factor_escala
+        
+        cts.PLAYER_MOVEMENT_SPEED = 5 * cts.TILE_SCALING
+        cts.GRAVITY = GRAVITY*cts.TILE_SCALING
+        cts.PLAYER_JUMP_SPEED =PLAYER_JUMP_SPEED * cts.TILE_SCALING
 
         self.tile_map = arcade.load_tilemap(
             ruta_mapa,
-            scaling=TILE_SCALING,
+            scaling=cts.TILE_SCALING,
             layer_options=layer_options,
         )
 
         # Create our Scene Based on the TileMap
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
+
+        #ajusta los moving_platforms con el tamaño de la pantalla
+        for platform in self.scene["Moving_Platforms"]:
+
+            if hasattr(platform, "boundary_left") and platform.boundary_left is not None:
+                platform.boundary_left *= cts.TILE_SCALING
+
+            if hasattr(platform, "boundary_right") and platform.boundary_right is not None:
+                platform.boundary_right *= cts.TILE_SCALING
+
+            if hasattr(platform, "boundary_top") and platform.boundary_top is not None:
+                platform.boundary_top *= cts.TILE_SCALING
+
+            if hasattr(platform, "boundary_bottom") and platform.boundary_bottom is not None:
+                platform.boundary_bottom *= cts.TILE_SCALING
         #Daño que soporta una pared de este layer
         for bloque in self.scene["Paredes_Destructibles"]:
             bloque.health= 50
 
         self.player_sprite = PlayerCharacter()
+        self.player_sprite.scale= cts.CHARACTER_SCALING #personaje escalado con la pantalla
         self.player_sprite.center_x = 128
         self.player_sprite.center_y = 128
         self.scene.add_sprite("Player", self.player_sprite)
@@ -175,7 +199,7 @@ class GameView(arcade.View):
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
             walls=self.mis_paredes,
-            gravity_constant=GRAVITY,
+            gravity_constant=cts.GRAVITY,
             platforms=self.scene["Moving_Platforms"],
             
         )
@@ -194,19 +218,21 @@ class GameView(arcade.View):
             enemy = enemy_class()
             #Pasar el juego al enemigo para que pueda "ver" al jugador
             enemy.juego = self
+            
 
             enemy.center_x = math.floor(
-                (coordinates[0]+1) * TILE_SCALING * self.tile_map.tile_width
+                (coordinates[0]+1) * cts.TILE_SCALING * self.tile_map.tile_width
             )
             enemy.center_y = math.floor(
-                (coordinates[1] +1) * (self.tile_map.tile_height * TILE_SCALING)
+                (coordinates[1] +1) * (self.tile_map.tile_height * cts.TILE_SCALING)
             )
             if "boundary_left" in enemy_marker.properties:
-                enemy.boundary_left = enemy_marker.properties["boundary_left"]
+                enemy.boundary_left = enemy_marker.properties["boundary_left"]*cts.TILE_SCALING
             if "boundary_right" in enemy_marker.properties:
-                enemy.boundary_right = enemy_marker.properties["boundary_right"]
+                enemy.boundary_right = enemy_marker.properties["boundary_right"]*cts.TILE_SCALING
             if "change_x" in enemy_marker.properties:
                 enemy.change_x = enemy_marker.properties["change_x"]
+            enemy.scale=cts.CHARACTER_SCALING
 
             self.scene.add_sprite("Enemies", enemy)
             engine = arcade.PhysicsEnginePlatformer(enemy, walls=self.mis_paredes, gravity_constant=GRAVITY,)
@@ -237,6 +263,8 @@ class GameView(arcade.View):
         # Calculate the right edge of the map in pixels
         self.end_of_map = (self.tile_map.width * self.tile_map.tile_width)
         self.end_of_map *= self.tile_map.scaling
+        # calcula el top del mapa
+        self.top_of_map=(self.tile_map.height*self.tile_map.tile_height)* self.tile_map.scaling
 
         # Add an empty bullet SpriteList to our scene
         self.scene.add_sprite_list("Bullets")
@@ -293,10 +321,10 @@ class GameView(arcade.View):
 
     def on_update(self, delta_time):
         """Movement and Game Logic"""
-
+        
         if not self.physics_engine:
             return
-
+        
         # Move the player using our physics engine
         self.physics_engine.update()
 
@@ -475,15 +503,22 @@ class GameView(arcade.View):
         self.center_camera_to_player()
 
     def center_camera_to_player(self):
-        #si pos x es menor que la mitad del ancho , no se mueve
-        if self.player_sprite.center_x<= WINDOW_WIDTH//2:
-            return
-        #si pos x es mayor que la pos x fin de mapa - la mitad del ancho tampoco 
-        if self.player_sprite.center_x>=(self.end_of_map-WINDOW_WIDTH//2) :
-            return
-        #en cualquier otro caso la cam sigue al player , su pos y es fija
+        ancho_ventana = self.window.width
+        alto_ventana = self.window.height
+        # Limite izquierdo
+        if self.player_sprite.center_x <= ancho_ventana // 2:
+            camera_x = ancho_ventana // 2
+        # Limite derecho
+        elif self.player_sprite.center_x >= (self.end_of_map - ancho_ventana // 2):
+            camera_x = self.end_of_map - ancho_ventana // 2
+        # Seguir jugador
         else:
-            self.camera.position=(self.player_sprite.center_x, WINDOW_HEIGHT//2)   
+            camera_x = self.player_sprite.center_x
+        # Centrar cámara
+        self.camera.position = (
+            camera_x,
+            alto_ventana // 2
+        )  
 
     def process_keychange(self):
         # First handle the case where we have moved up. This needs to be handled
@@ -492,15 +527,18 @@ class GameView(arcade.View):
         # different if we had a separate button for jumping, we would only need
         # to handle moving upwards if we were on a ladder for the up key then.
         # Here we also handle the case where we have moved down while on a ladder.
+        if self.physics_engine is None:
+            return
+        
         if self.up_pressed and not self.down_pressed:
             if self.physics_engine.is_on_ladder():
-                self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+                self.player_sprite.change_y = cts.PLAYER_MOVEMENT_SPEED
             elif self.physics_engine.can_jump(y_distance=10):
-                self.player_sprite.change_y = PLAYER_JUMP_SPEED
+                self.player_sprite.change_y = cts.PLAYER_JUMP_SPEED
                 arcade.play_sound(self.jump_sound)
         elif self.down_pressed and not self.up_pressed:
             if self.physics_engine.is_on_ladder():
-                self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+                self.player_sprite.change_y = -cts.PLAYER_MOVEMENT_SPEED
 
         # Now we need a special handling of our vertical movement while we are 
         # on a ladder, but have no input specified. When we jump, the physics
@@ -519,9 +557,9 @@ class GameView(arcade.View):
         # Now we just handle our horizontal movement, very similar to how we
         # did before, but now just combined in our new function.
         if self.right_pressed and not self.left_pressed:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_x = cts.PLAYER_MOVEMENT_SPEED
         elif self.left_pressed and not self.right_pressed:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_x = -cts.PLAYER_MOVEMENT_SPEED
         else:
             self.player_sprite.change_x = 0
 
@@ -659,7 +697,7 @@ class PauseView(arcade.View):
 
 def main():
     """Main function"""
-    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
+    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE,resizable=True)
     
     window.MainMenuClass = mainMenu
     window.GameViewClass = GameView

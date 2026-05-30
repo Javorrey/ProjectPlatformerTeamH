@@ -154,6 +154,7 @@ class Enemy(arcade.Sprite):
         super().__init__()
 
         #Cada frame es de 64x64
+        self.scale = CHARACTER_SCALING
         WIDTH = 64
         HEIGHT = 64
 
