@@ -236,7 +236,7 @@ class GameView(arcade.View):
                 enemy.boundary_right = enemy_marker.properties["boundary_right"]*cts.TILE_SCALING
             if "change_x" in enemy_marker.properties:
                 enemy.change_x = enemy_marker.properties["change_x"]
-            enemy.scale=cts.CHARACTER_SCALING
+            enemy.scale = enemy.scale[0] * factor_escala
 
             self.scene.add_sprite("Enemies", enemy)
             engine = arcade.PhysicsEnginePlatformer(enemy, walls=self.mis_paredes, gravity_constant=GRAVITY,)
