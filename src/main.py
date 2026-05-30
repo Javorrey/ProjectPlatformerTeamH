@@ -159,6 +159,15 @@ class GameView(arcade.View):
         # Create our Scene Based on the TileMap
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
+        #Quitar las piezas si ya han sido recogidas en este nivel en partidas anteriores
+        datos = self.window.datos_guardados
+        nivel_actual = self.window.nivel_seleccionado
+
+        if datos["piezas_recogidas"][str(nivel_actual)] == 1:
+            for item in self.scene["Items"]:
+                if item.properties["type"] == "pieza":
+                    item.remove_from_sprite_lists()
+
         #ajusta los moving_platforms con el tamaño de la pantalla
         for platform in self.scene["Moving_Platforms"]:
 
@@ -273,9 +282,6 @@ class GameView(arcade.View):
         # Add an empty bullet SpriteList to our scene
         self.scene.add_sprite_list("Bullets")
         self.scene.add_sprite_list("Balas_Enemigas")
-        # Comprobar si el jugador cogió la pieza
-        self.pieza_recogida= False
-
 
         if self.tile_map.background_color:
             self.window.background_color = self.tile_map.background_color
@@ -490,19 +496,18 @@ class GameView(arcade.View):
         )
 
         for objeto in colisiones_obj:
+            datos = self.window.datos_guardados
+            nivel_actual = self.window.nivel_seleccionado
             if objeto.properties["type"] == "pieza":
                 objeto.remove_from_sprite_lists()
                 objeto.kill()
                 arcade.play_sound(self.collect_coin_sound)
-                self.pieza_recogida= True
+                datos["piezas_recogidas"][str(nivel_actual)] = 1
                 self.score +=75
                 self.score_text.text= f"Score: {self.score}"               
               
             elif objeto.properties["type"] == "portal":
-                if self.pieza_recogida:
-                    datos = self.window.datos_guardados
-
-                    nivel_actual = self.window.nivel_seleccionado
+                if datos["piezas_recogidas"][str(nivel_actual)] ==1:
                     #Mejor puntuacion
                     if self.score > datos["puntuaciones"][str(nivel_actual)]:
                         datos["puntuaciones"][str(nivel_actual)] = self.score
@@ -511,8 +516,6 @@ class GameView(arcade.View):
                         if nivel_actual < 5: # Solo hay 5 niveles, no queremos que intente desbloquear el 6
                             datos["nivel_desbloqueado"] = nivel_actual + 1
 
-                    serializacion.guardar_datos(datos)
-
                     self.reproductor_musica.pause()
                     cts.PLAYING_LEVEL = False
                     game_over = GameOver()
@@ -520,6 +523,7 @@ class GameView(arcade.View):
                     return
                 else:
                     pass
+            serializacion.guardar_datos(datos)
                     
         #metodo que centra la camara en base a la posicion del player
         self.center_camera_to_player()
