@@ -143,6 +143,7 @@ class DisparoPrincipal(arcade.Sprite):
         self.change_y = vel_y
         self.dmg = 25
         self.juego = juego
+        self.scale=PRINCIPAL_SHOOT_SCALE
 
         self.texture_list = sprite
         #print(len(self.texture_list))

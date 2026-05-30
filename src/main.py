@@ -110,11 +110,11 @@ class GameView(arcade.View):
         self.secondaryFire_texture_list = preload_assets("Friendly Bomb 2.0.png", 2, 5)
         self.enemy_bullet_texture_list = preload_assets("enemy_fire_3.0.png", 2, 5)
         self.secondaryFireCharge_texture_list = preload_assets("Charging (1).png", 3, 10)
-        
+        factor_escala=self.window.width/1280
 
         self.gui_sprites = arcade.SpriteList()
         self.secondaryFireChargeSprite = arcade.Sprite(self.secondaryFireCharge_texture_list[8])
-        self.secondaryFireChargeSprite.right = WINDOW_WIDTH - 30
+        self.secondaryFireChargeSprite.right = WINDOW_WIDTH*factor_escala - 30
         self.secondaryFireChargeSprite.bottom = 30
         self.gui_sprites.append(self.secondaryFireChargeSprite)
 
@@ -358,6 +358,7 @@ class GameView(arcade.View):
         self.player_sprite.change_x_aim = self.velocidad_bala_x 
 
         # ---------------- LOGICA DE DISPARO NORMAL ----------------
+        factor_escala=self.window.width/1280
         if self.can_shoot:
             if self.shoot_pressed:
                 arcade.play_sound(self.shoot_sound)
@@ -376,6 +377,8 @@ class GameView(arcade.View):
                     self.primaryFire_texture_list
                 )
 
+                cts.PRINCIPAL_SHOOT_SCALE= PRINCIPAL_SHOOT_SCALE* factor_escala
+                bullet.scale=cts.PRINCIPAL_SHOOT_SCALE
                 self.scene.add_sprite("Bullets", bullet)
                 self.can_shoot = False
         else:
@@ -401,7 +404,6 @@ class GameView(arcade.View):
                     self,
                     self.secondaryFire_texture_list
                 )
-                factor_escala=self.window.width/1280
                 cts.SECONDARY_SHOOT_SCALE= SECONDARY_SHOOT_SCALE* factor_escala
                 misil.scale=cts.SECONDARY_SHOOT_SCALE
                 

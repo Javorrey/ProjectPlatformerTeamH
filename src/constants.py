@@ -17,6 +17,8 @@ GRAVITY = 0.5
 PLAYER_JUMP_SPEED = 14.14
 #Secondary shoot
 SECONDARY_SHOOT_SCALE=2
+#Principal shoot
+PRINCIPAL_SHOOT_SCALE=1
 
 #Constants used to track the direction a character is facing
 RIGHT_FACING = 0
