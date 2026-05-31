@@ -20,6 +20,7 @@ from niveles import VistaNiveles
 from ajustes import VistaAjustes
 
 from gameOver import GameOver
+from gameClear import GameClearView
 
 import serializacion
 
@@ -527,20 +528,33 @@ class GameView(arcade.View):
                 self.score_text.text= f"Score: {self.score}"               
               
             elif objeto.properties["type"] == "portal":
-                if datos["piezas_recogidas"][str(nivel_actual)] ==1:
-                    #Mejor puntuacion
+                if datos["piezas_recogidas"][str(nivel_actual)] == 1:
+                    # Mejor puntuación del nivel actual
                     if self.score > datos["puntuaciones"][str(nivel_actual)]:
                         datos["puntuaciones"][str(nivel_actual)] = self.score
-                    # Desbloquear siguiente nivel
-                    if nivel_actual >= datos["nivel_desbloqueado"]:
-                        if nivel_actual < 5: # Solo hay 5 niveles, no queremos que intente desbloquear el 6
-                            datos["nivel_desbloqueado"] = nivel_actual + 1
-                            self.window.nivel_seleccionado = nivel_actual + 1
-
+                    
                     self.reproductor_musica.pause()
                     cts.PLAYING_LEVEL = False
+
+                    # COMPROBACIÓN: ¿Era este el último nivel del juego? (Ejemplo: Nivel 5)
+                    ULTIMO_NIVEL = 5 
+                    if nivel_actual >= ULTIMO_NIVEL:
+                        # Calculamos la puntuación total sumando la de todos los niveles guardados
+                        puntuacion_total = sum(datos["puntuaciones"].values())
+                        
+                        # Importamos la vista (si la pusiste en otro archivo)
+                        # from gameClear import GameClearView
+                        
+                        # Llamamos a la pantalla de fin de juego pasando los datos necesarios
+                        fin_juego_view = GameClearView(puntuacion_total, datos["piezas_recogidas"])
+                        self.window.show_view(fin_juego_view)
+                        return
+
+                    if nivel_actual >= datos["nivel_desbloqueado"]:
+                        datos["nivel_desbloqueado"] = nivel_actual + 1
+                        self.window.nivel_seleccionado = nivel_actual + 1
+
                     self.window.set_mouse_visible(True)
-                    #game_over = GameOver()
                     next_level = GameView()
                     self.window.show_view(next_level)
                     return
