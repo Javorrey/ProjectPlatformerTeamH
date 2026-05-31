@@ -515,6 +515,7 @@ class GameView(arcade.View):
                     if nivel_actual >= datos["nivel_desbloqueado"]:
                         if nivel_actual < 5: # Solo hay 5 niveles, no queremos que intente desbloquear el 6
                             datos["nivel_desbloqueado"] = nivel_actual + 1
+                            self.window.nivel_seleccionado = nivel_actual + 1
 
                     self.reproductor_musica.pause()
                     cts.PLAYING_LEVEL = False
