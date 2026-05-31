@@ -12,7 +12,7 @@ John Michael Crossley Díaz
 
 Para ejecutar el juego:
 
-- Se debe tener Python 3 instalado
+- Se debe tener Python 3.10 o superior instalado
 - Clona el repositorio con "git clone https://github.com/Javorrey/ProjectPlatformerTeamH"
 - Crea un entorno virtual en el directorio raiz del repositorio con "python -m venv venv"
 - Active el entorno virtual ("./venv/Scripts/activate" en Windows y "source venv/bin/activate" en Linux)
