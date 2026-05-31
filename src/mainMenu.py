@@ -26,7 +26,7 @@ class mainMenu(arcade.View):
         self.lista_mando = arcade.SpriteList()
         
         self.boton_jugar = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_jugar_menu.png"), scale = 1.8)
-        self.boton_reinicio = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_nivel_menu.png"), scale = 1.8)
+        self.boton_reinicio = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_reiniciar_menu.png"), scale = 1.8)
         self.boton_ajustes = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_ajustes_menu.png"), scale = 1.8)
         self.boton_salir = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_salir_menu.png"), scale = 1.8)
         self.boton_controles = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "mando_controles_menu.png"), scale = 0.075)

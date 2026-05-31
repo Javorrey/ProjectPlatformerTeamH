@@ -69,7 +69,6 @@ El jugador acumula puntos al eliminar enemigos (150 puntos por enemigo) y al des
 La interfaz está compuesta por las siguientes pantallas:
 
 - Menú principal: Pantalla de inicio con acceso a jugar, reiniciar el progreso, ajustes, controles y salir. Reproduce música de fondo en bucle.
-Selección de nivel: Permite al jugador elegir directamente cualquiera de los cinco niveles disponibles.
 - Ajustes: Incluye un slider de control de volumen de la música y un toggle para activar o desactivar el modo pantalla completa. Los cambios se aplican en tiempo real y se mantienen al volver al menú.
 - Controles: Pantalla informativa con la guía de controles del juego.
 - Game Over: Se muestra al morir el jugador, con opciones para volver a intentar el nivel o regresar al menú principal.
@@ -113,7 +112,6 @@ El código está dividido en módulos independientes, cada uno con una responsab
 - **`projectile.py`:** Implementa la jerarquía de proyectiles. La clase base `ProyectilBase` define la lógica común de movimiento y colisión. De ella heredan `DisparoPrincipal`, `DisparoSecundario` (con explosión en área y rocket jump) y `AlienProyectile`, cada uno con comportamiento propio.
 - **`serializacion.py`:** Gestiona la lectura y escritura del archivo de guardado `savegame.json` mediante las funciones `cargar_datos()` y `guardar_datos()`. Si el archivo no existe o está corrupto, lo regenera automáticamente con los valores iniciales.
 - **`mainMenu.py`:** Gestiona la pantalla del menú principal, incluyendo la carga y reproducción de la música del menú y el botón de nueva partida que resetea el progreso guardado.
-- **`niveles.py`:** Pantalla de selección de nivel. Almacena el nivel elegido en la ventana para que `GameView` lo cargue al iniciar la partida.
 - **`ajustes.py`:** Pantalla de ajustes con control de volumen mediante slider y toggle de pantalla completa. Los cambios se aplican en tiempo real y persisten entre vistas.
 - **`controles.py`:** Pantalla informativa con la guía de controles del juego.
 - **`gameOver.py`:** Pantalla de Game Over con opciones para reintentar el nivel o volver al menú.
