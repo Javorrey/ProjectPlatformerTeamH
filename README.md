@@ -12,9 +12,11 @@ John Michael Crossley Díaz
 
 Para ejecutar el juego:
 
-- Se tiene que tener Python 3 instalado
-- Se debe instalar la libreria Arcade en la terminal con: pip install arcade o python3 -m pip install arcade, la versión utilizada es 3.3.3.
-- Se debe entrar a la carpeta src escribiendo en la terminal cd src
+- Se debe tener Python 3 instalado
+- Clona el repositorio con "git clone https://github.com/Javorrey/ProjectPlatformerTeamH"
+- Crea un entorno virtual en el directorio raiz del repositorio con "python -m venv venv"
+- Active el entorno virtual ("./venv/Scripts/activate" en Windows y "source venv/bin/activate" en Linux)
+- Instala las dependencias con "pip install -r requirements.txt"
 - Para ejecutar el juego, escriba en la terminal python3 main.py
 
 Controles del juego:
