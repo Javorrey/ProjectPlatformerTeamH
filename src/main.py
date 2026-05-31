@@ -747,7 +747,7 @@ class PauseView(arcade.View):
 
 def main():
     """Main function"""
-    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE,resizable=True)
+    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
     
     window.MainMenuClass = mainMenu
     window.GameViewClass = GameView
