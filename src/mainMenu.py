@@ -6,6 +6,8 @@ from controles import VistaControles
 
 import sys
 from pathlib import Path
+
+import serializacion
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from constants import *
 
@@ -24,13 +26,13 @@ class mainMenu(arcade.View):
         self.lista_mando = arcade.SpriteList()
         
         self.boton_jugar = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_jugar_menu.png"), scale = 1.8)
-        self.boton_nivel = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_nivel_menu.png"), scale = 1.8)
+        self.boton_reinicio = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_nivel_menu.png"), scale = 1.8)
         self.boton_ajustes = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_ajustes_menu.png"), scale = 1.8)
         self.boton_salir = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "boton_salir_menu.png"), scale = 1.8)
         self.boton_controles = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "mando_controles_menu.png"), scale = 0.075)
 
         self.lista_botones.append(self.boton_jugar)
-        self.lista_botones.append(self.boton_nivel)
+        self.lista_botones.append(self.boton_reinicio)
         self.lista_botones.append(self.boton_ajustes)
         self.lista_botones.append(self.boton_salir)
         self.lista_mando.append(self.boton_controles)
@@ -60,8 +62,8 @@ class mainMenu(arcade.View):
         self.boton_jugar.center_x = centro_x
         self.boton_jugar.center_y = alto * (340/600)
 
-        self.boton_nivel.center_x = centro_x
-        self.boton_nivel.center_y = alto * (270/600)
+        self.boton_reinicio.center_x = centro_x
+        self.boton_reinicio.center_y = alto * (270/600)
 
         self.boton_ajustes.center_x = centro_x
         self.boton_ajustes.center_y = alto * (200/600)
@@ -109,9 +111,12 @@ class mainMenu(arcade.View):
                 vista_juego = self.window.GameViewClass()
                 self.window.show_view(vista_juego)
 
-            if boton_clicado == self.boton_nivel:
-                proxima_vista = VistaNiveles()
-                self.window.show_view(proxima_vista)
+            if boton_clicado == self.boton_reinicio:
+                serializacion.guardar_datos(DATOS_INICIALES)
+
+                # Actualizar datos en memoria
+                self.window.datos_guardados = DATOS_INICIALES.copy()
+                self.window.nivel_seleccionado = DATOS_INICIALES["nivel_desbloqueado"]
 
             elif boton_clicado == self.boton_ajustes:
                 proxima_vista = VistaAjustes()
