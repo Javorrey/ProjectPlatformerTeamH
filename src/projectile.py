@@ -50,6 +50,7 @@ class ProyectilBase(arcade.Sprite):
                     if collision.health <= 0:
                         collision.remove_from_sprite_lists()
                         self.juego.score += 150 # Sumamos puntos a la partida
+                        self.juego.score_text.text = f"Score: {self.juego.score}"
                 elif self.juego.scene["Paredes_Destructibles"] in collision.sprite_lists:
                     if hasattr(collision, "health"):
                         collision.health -= self.dmg
@@ -121,6 +122,7 @@ class ProyectilExplosivo(ProyectilBase):
                     if enemy.health <= 0:
                         enemy.remove_from_sprite_lists()
                         self.juego.score += 150
+                        self.juego.score_text.text = f"Score: {self.juego.score}"
                 
             for bloque in self.juego.scene["Paredes_Destructibles"]:
                 distancia_pared = arcade.get_distance_between_sprites(self, bloque)
@@ -129,6 +131,7 @@ class ProyectilExplosivo(ProyectilBase):
                     if bloque.health <= 0:
                         bloque.remove_from_sprite_lists()
                         self.juego.score += 50
+                        self.juego.score_text.text = f"Score: {self.juego.score}"
             
             self.remove_from_sprite_lists()
             arcade.play_sound(self.juego.hit_sound)
@@ -202,13 +205,14 @@ class DisparoPrincipal(arcade.Sprite):
                     if collision.health <= 0:
                         collision.remove_from_sprite_lists()
                         self.juego.score += 150 # Sumamos puntos a la partida
+                        self.juego.score_text.text = f"Score: {self.juego.score}"
                 elif self.juego.scene["Paredes_Destructibles"] in collision.sprite_lists:
                     if hasattr(collision, "health"):
                         collision.health -= self.dmg
                         if collision.health <= 0 :
                             collision.remove_from_sprite_lists()
                             self.juego.score += 50
-            
+                            self.juego.score_text.text = f"Score: {self.juego.score}"
             self.change_x = 0
             self.change_y = 0
             self.impact = True
@@ -267,7 +271,7 @@ class DisparoSecundario(DisparoPrincipal):
                     if enemy.health <= 0:
                         enemy.remove_from_sprite_lists()
                         self.juego.score += 150
-            
+                        self.juego.score_text.text = f"Score: {self.juego.score}"
             for bloque in self.juego.scene["Paredes_Destructibles"]:
                 distancia_pared = arcade.get_distance_between_sprites(self, bloque)
                 if distancia_pared <= self.radio_explosion:
@@ -275,6 +279,7 @@ class DisparoSecundario(DisparoPrincipal):
                     if bloque.health <= 0:
                         bloque.remove_from_sprite_lists()
                         self.juego.score += 50
+                        self.juego.score_text.text = f"Score: {self.juego.score}"
         
             self.change_x = 0
             self.change_y = 0
