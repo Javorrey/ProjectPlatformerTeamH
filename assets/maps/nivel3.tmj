@@ -535,74 +535,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":42,
-                 "name":"a4",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":6885
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":9280
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":7989,
-                 "y":662.666666666667
-                }, 
-                {
-                 "height":0,
-                 "id":45,
-                 "name":"a7",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":6885
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":9280
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":8068.33333333333,
-                 "y":659.333333333333
-                }, 
-                {
-                 "height":0,
                  "id":51,
                  "name":"a8",
                  "opacity":1,
@@ -632,76 +564,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":8147.33333333333,
-                 "y":659.666666666666
-                }, 
-                {
-                 "height":0,
-                 "id":52,
-                 "name":"a9",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":6885
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":9280
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":8526,
-                 "y":655.333333333333
-                }, 
-                {
-                 "height":0,
-                 "id":53,
-                 "name":"a10",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":6885
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":9280
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":8611.33333333333,
-                 "y":650.333333333333
+                 "x":8156.33333333333,
+                 "y":722.666666666666
                 }, 
                 {
                  "height":0,
@@ -943,40 +807,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":66,
-                 "name":"a22",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":12450
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":14520
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":13975.6666666667,
-                 "y":694.333333333333
-                }, 
-                {
-                 "height":0,
                  "id":67,
                  "name":"a21",
                  "opacity":1,
@@ -1011,40 +841,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":68,
-                 "name":"a20",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":12450
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":14520
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":13331.3333333333,
-                 "y":701.333333333333
-                }, 
-                {
-                 "height":0,
                  "id":69,
                  "name":"a19",
                  "opacity":1,
@@ -1076,40 +872,6 @@
                  "width":0,
                  "x":13049,
                  "y":698.333333333333
-                }, 
-                {
-                 "height":0,
-                 "id":70,
-                 "name":"a18",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":12450
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":14520
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":12794.6666666667,
-                 "y":698
                 }, 
                 {
                  "height":0,
@@ -1181,108 +943,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":46,
-                 "name":"a6",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":6885
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":9280
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":7191.99999999999,
-                 "y":537.333333333333
-                }, 
-                {
-                 "height":0,
-                 "id":47,
-                 "name":"a5",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":6885
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":9280
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":7771,
-                 "y":557.666666666666
-                }, 
-                {
-                 "height":0,
-                 "id":48,
-                 "name":"a3",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":6885
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":9280
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":7511,
-                 "y":588
-                }, 
-                {
-                 "height":0,
                  "id":49,
                  "name":"a1",
                  "opacity":1,
@@ -1312,8 +972,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":7413,
-                 "y":574.666666666666
+                 "x":7569,
+                 "y":605.666666666666
                 }, 
                 {
                  "height":0,
@@ -2728,7 +2388,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
