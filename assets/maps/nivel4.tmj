@@ -997,40 +997,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":45,
-                 "name":"a2",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":9044
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":9400
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":1
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":9213.33333333334,
-                 "y":437.333333333333
-                }, 
-                {
-                 "height":0,
                  "id":46,
                  "name":"a3",
                  "opacity":1,
@@ -1099,40 +1065,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":48,
-                 "name":"a5",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":12797
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":13232
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":1
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":13144,
-                 "y":617.333333333333
-                }, 
-                {
-                 "height":0,
                  "id":49,
                  "name":"a6",
                  "opacity":1,
@@ -1167,40 +1099,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":50,
-                 "name":"a7",
-                 "opacity":1,
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"boundary_left",
-                         "type":"int",
-                         "value":13814
-                        }, 
-                        {
-                         "name":"boundary_right",
-                         "type":"int",
-                         "value":14264
-                        }, 
-                        {
-                         "name":"change_x",
-                         "type":"int",
-                         "value":1
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"alien"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":14190.6666666667,
-                 "y":624
-                }, 
-                {
-                 "height":0,
                  "id":51,
                  "name":"a8",
                  "opacity":1,
@@ -1230,8 +1128,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":14736,
-                 "y":750.666666666667
+                 "x":14609.3333333333,
+                 "y":749.333333333334
                 }, 
                 {
                  "height":0,
@@ -5964,7 +5862,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -6438,7 +6335,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {

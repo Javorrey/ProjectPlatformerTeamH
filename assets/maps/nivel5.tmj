@@ -1107,8 +1107,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":14548,
-                 "y":756
+                 "x":13846.6666666667,
+                 "y":764
                 }, 
                 {
                  "height":0,
@@ -1141,8 +1141,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":14879,
-                 "y":757
+                 "x":15072.3333333333,
+                 "y":761
                 }, 
                 {
                  "height":0,
@@ -4619,7 +4619,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {

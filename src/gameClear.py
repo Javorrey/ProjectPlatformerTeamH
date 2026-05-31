@@ -49,7 +49,7 @@ class GameClearView(arcade.View):
 
         # --- ESTADÍSTICAS ---
         # Recuadro de fondo para las estadísticas
-        arcade.draw_lrtb_rectangle_filled(
+        arcade.draw_lrbt_rectangle_filled(
             left=ancho // 2 - 200,
             right=ancho // 2 + 200,
             top=alto // 2 + 40,
