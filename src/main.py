@@ -529,8 +529,9 @@ class GameView(arcade.View):
                     self.reproductor_musica.pause()
                     cts.PLAYING_LEVEL = False
                     self.window.set_mouse_visible(True)
-                    game_over = GameOver()
-                    self.window.show_view(game_over)
+                    #game_over = GameOver()
+                    next_level = GameView()
+                    self.window.show_view(next_level)
                     return
                 else:
                     pass
