@@ -15,7 +15,7 @@ Para ejecutar el juego:
 - Se tiene que tener Python 3 instalado
 - Se debe instalar la libreria Arcade en la terminal con: pip install arcade o python3 -m pip install arcade, la versión utilizada es 3.3.3.
 - Se debe entrar a la carpeta src escribiendo en la terminal cd src
-- Para ejecutar el juego, escriba en la terminal python main.py
+- Para ejecutar el juego, escriba en la terminal python3 main.py
 
 Controles del juego:
 
