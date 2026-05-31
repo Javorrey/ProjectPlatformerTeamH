@@ -23,6 +23,7 @@ class GameOver(arcade.View):
         self.lista_botones.append(self.boton_ir_al_menu)
 
     def on_show_view(self):
+        self.window.set_mouse_visible(True)
         centro_x = self.window.width / 2
         alto = self.window.height
 

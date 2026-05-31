@@ -118,14 +118,24 @@ class GameView(arcade.View):
         self.secondaryFireChargeSprite.bottom = 30
         self.gui_sprites.append(self.secondaryFireChargeSprite)
 
-        ruta_musica = str(BASE_DIR / "assets" / "music" / "Phase Shift.mp3")
-        self.musica_fondo = arcade.load_sound(ruta_musica)
+        
+        
+        ruta_musica_glacial = str(BASE_DIR / "assets" / "music" / "Phase Shift.mp3")
+        ruta_musica_superficie = str(BASE_DIR / "assets" / "music" / "Overflowing Core.mp3")
+        ruta_musica_volcan = str(BASE_DIR / "assets" / "music" / "Virus.mp3")
+        if self.window.nivel_seleccionado in [1, 2]:
+            self.musica_fondo = arcade.load_sound(ruta_musica_glacial)
+        elif self.window.nivel_seleccionado == 3:
+            self.musica_fondo = arcade.load_sound(ruta_musica_superficie)
+        else:
+            self.musica_fondo = arcade.load_sound(ruta_musica_volcan)
         self.reproductor_musica = None
 
         self.window.game_view = self
 
     def setup(self):
         cts.PLAYING_LEVEL = True
+        self.window.set_mouse_visible(False)
         """Set up the game here. Call this function to restart the game."""
         layer_options = {
             "Platforms": {
@@ -340,7 +350,7 @@ class GameView(arcade.View):
 
         #Búsqueda espacial para todos los enemigos
         self.enemigos_cercanos = set()
-        RADIO_ACTIVACION = 2000 
+        RADIO_ACTIVACION = 2000   
         for enemy in self.scene["Enemies"]:
             dx = enemy.center_x - self.player_sprite.center_x
             dy = enemy.center_y - self.player_sprite.center_y
@@ -373,7 +383,6 @@ class GameView(arcade.View):
                 vel_x = self.velocidad_bala_x if self.player_sprite.facing_direction == RIGHT_FACING else -self.velocidad_bala_x
                 vel_y = self.velocidad_bala_y
                 
-                # Usar la nueva clase LaserAzul
                 bullet = DisparoPrincipal(
                     self.player_sprite.center_x - 12, 
                     self.player_sprite.center_y - 4, 
@@ -382,8 +391,7 @@ class GameView(arcade.View):
                     self,
                     self.primaryFire_texture_list
                 )
-
-                cts.PRINCIPAL_SHOOT_SCALE= PRINCIPAL_SHOOT_SCALE* factor_escala
+                cts.PRINCIPAL_SHOOT_SCALE= PRINCIPAL_SHOOT_SCALE * factor_escala
                 bullet.scale=cts.PRINCIPAL_SHOOT_SCALE
                 self.scene.add_sprite("Bullets", bullet)
                 self.can_shoot = False
@@ -410,7 +418,7 @@ class GameView(arcade.View):
                     self,
                     self.secondaryFire_texture_list
                 )
-                cts.SECONDARY_SHOOT_SCALE= SECONDARY_SHOOT_SCALE* factor_escala
+                cts.SECONDARY_SHOOT_SCALE= SECONDARY_SHOOT_SCALE * factor_escala
                 misil.scale=cts.SECONDARY_SHOOT_SCALE
                 
                 self.scene.add_sprite("Bullets", misil)
@@ -486,6 +494,7 @@ class GameView(arcade.View):
 
             arcade.play_sound(self.gameover_sound)
 
+            self.window.set_mouse_visible(True)
             game_over = GameOver()
             self.window.show_view(game_over)
 
@@ -519,6 +528,7 @@ class GameView(arcade.View):
 
                     self.reproductor_musica.pause()
                     cts.PLAYING_LEVEL = False
+                    self.window.set_mouse_visible(True)
                     game_over = GameOver()
                     self.window.show_view(game_over)
                     return
@@ -719,6 +729,7 @@ class PauseView(arcade.View):
         # Si presiona ENTER, destruimos el juego y volvemos al inicio
         elif key == arcade.key.ENTER:
             cts.PLAYING_LEVEL = False
+            self.window.set_mouse_visible(True)
             menu_view = mainMenu()
             self.window.show_view(menu_view)
 

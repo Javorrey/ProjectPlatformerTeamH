@@ -231,11 +231,12 @@ class DisparoSecundario(DisparoPrincipal):
         self.impact = False
         self.animation_frame = 0
         self.accumulatedTime = 0.0
+        self.radio_explosion = SECONDARY_SHOOT_RADIUS
 
         angulo_radianes = math.atan2(self.change_y, self.change_x)
         self.angle = -math.degrees(angulo_radianes)
 
-        self.radio_explosion = 150
+        
 
     def check_collisions(self):
         if self.impact:
@@ -259,7 +260,7 @@ class DisparoSecundario(DisparoPrincipal):
                 dx = self.juego.player_sprite.center_x - self.center_x
                 dy = self.juego.player_sprite.center_y - self.center_y
                 angulo_empuje = math.atan2(dy, dx)
-                fuerza = 20 
+                fuerza = SECONDARY_SHOOT_FORCE * cts.TILE_SCALING
                 self.juego.player_sprite.center_y += 2
                 self.juego.player_sprite.change_y += math.sin(angulo_empuje) * fuerza
 
