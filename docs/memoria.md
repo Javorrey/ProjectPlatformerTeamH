@@ -160,9 +160,9 @@ En definitiva, el balance final del proyecto es sumamente positivo. Aunque el ca
 
 ## Anexo I
 MUSICA
-"Mythical Axiom" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX [Mythical Axiom Youtube link](https://www.youtube.com/watch?v=qbI3c-XRlz4)
+<p>"Mythical Axiom" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX [Mythical Axiom Youtube link](https://www.youtube.com/watch?v=qbI3c-XRlz4)<br>
 "Phase Shift" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX
-[Phase Shift Youtube link](https://www.youtube.com/watch?v=QH0OmNGUB5w)
-"Overflowing Core" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX [Overflowing Core Youtube link](https://www.youtube.com/watch?v=2EkUtLTGgVk)
+[Phase Shift Youtube link](https://www.youtube.com/watch?v=QH0OmNGUB5w)<br>
+"Overflowing Core" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX [Overflowing Core Youtube link](https://www.youtube.com/watch?v=2EkUtLTGgVk)<br>
 "Virus" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX
-[Virus Youtube link](https://www.youtube.com/watch?v=bc49K0Rn3nQ)
+[Virus Youtube link](https://www.youtube.com/watch?v=bc49K0Rn3nQ)</p>
