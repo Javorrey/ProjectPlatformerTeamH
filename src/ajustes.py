@@ -14,7 +14,7 @@ class VistaAjustes(arcade.View):
 
         arcade.load_font(str(BASE_DIR / "assets" / "fonts" / "fuente_menu.ttf"))
         
-        self.fondo = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "ajustes"/ "fondo_menu.png"))
+        self.fondo = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "ajustes"/ "Fondo_menu.png"))
         self.icono_sonido = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "ajustes" / "icono_sonido_menu.png"))
         self.icono_pantalla = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "ajustes" / "icono_pantalla_menu.png"))
 
