@@ -18,9 +18,9 @@ class mainMenu(arcade.View):
         """
         super().__init__()
 
-        arcade.load_font(str(BASE_DIR / "assets" / "fonts" / "Fuente_menu.ttf"))
+        arcade.load_font(str(BASE_DIR / "assets" / "fonts" / "fuente_menu.ttf"))
         
-        self.fondo = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "fondo_menu.png"))
+        self.fondo = arcade.load_texture(str(BASE_DIR / "assets" / "images" / "menu" / "main" / "Fondo_menu.png"))
 
         self.lista_botones = arcade.SpriteList()
         self.lista_mando = arcade.SpriteList()
