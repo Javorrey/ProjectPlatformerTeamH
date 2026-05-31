@@ -157,3 +157,12 @@ Este proyecto nos ha permitido consolidar nuestros conocimientos en la programac
 Por otro lado, trabajar en grupo nos ha enseñado lecciones que van mucho más allá de escribir código. Hemos aprendido a coordinarnos, a integrar diferentes módulos programados por distintas personas y a comunicarnos de forma efectiva para resolver los conflictos que surgían al juntar las piezas. Entender el código de un compañero, buscar soluciones conjuntas y apoyarnos en los momentos de frustración ha sido vital para sacar el proyecto adelante.
 
 En definitiva, el balance final del proyecto es sumamente positivo. Aunque el camino ha estado lleno de desafíos y quebraderos de cabeza, la satisfacción de ver nuestro juego funcionando, hace que todo el esfuerzo haya merecido la pena. Nos llevamos un aprendizaje técnico y personal inmenso, y una base de conocimientos para afrontar cualquier proyecto de desarrollo en el futuro.
+
+## Anexo I
+MUSICA
+"Mythical Axiom" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX [Mythical Axiom Youtube link](https://www.youtube.com/watch?v=qbI3c-XRlz4)
+"Phase Shift" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX
+[Phase Shift Youtube link](https://www.youtube.com/watch?v=QH0OmNGUB5w)
+"Overflowing Core" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX [Overflowing Core Youtube link](https://www.youtube.com/watch?v=2EkUtLTGgVk)
+"Virus" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX
+[Virus Youtube link](https://www.youtube.com/watch?v=bc49K0Rn3nQ)
