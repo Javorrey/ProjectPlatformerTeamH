@@ -373,6 +373,15 @@ class GameView(arcade.View):
         self.player_sprite.change_y_aim = self.velocidad_bala_y
         self.player_sprite.change_x_aim = self.velocidad_bala_x 
 
+        offcenter_x_factor = 0
+        offcenter_y_factor = 0
+        if self.player_sprite.facing_direction == RIGHT_FACING:
+            offcenter_x_factor = -12
+            offcenter_y_factor = -5
+        elif self.player_sprite.facing_direction == LEFT_FACING:
+            offcenter_x_factor = 32
+            offcenter_y_factor = 5
+
         # ---------------- LOGICA DE DISPARO NORMAL ----------------
         factor_escala=self.window.width/1280
         if self.can_shoot:
@@ -384,8 +393,8 @@ class GameView(arcade.View):
                 vel_y = self.velocidad_bala_y
                 
                 bullet = DisparoPrincipal(
-                    self.player_sprite.center_x - 12, 
-                    self.player_sprite.center_y - 4, 
+                    self.player_sprite.center_x + offcenter_x_factor, 
+                    self.player_sprite.center_y + offcenter_y_factor, 
                     vel_x, 
                     vel_y,
                     self,
@@ -408,11 +417,13 @@ class GameView(arcade.View):
                 
                 vel_x = self.velocidad_bala_x if self.player_sprite.facing_direction == RIGHT_FACING else -self.velocidad_bala_x
                 vel_y = self.velocidad_bala_y
+
+
                 
                 # Usar la clase ProyectilExplosivo
                 misil = DisparoSecundario(
-                    self.player_sprite.center_x - 12, 
-                    self.player_sprite.center_y - 4, 
+                    self.player_sprite.center_x + offcenter_x_factor, 
+                    self.player_sprite.center_y + offcenter_y_factor, 
                     vel_x, 
                     vel_y,
                     self,
