@@ -18,6 +18,8 @@ Para ejecutar el juego:
 - Active el entorno virtual ("./venv/Scripts/activate" en Windows y "source venv/bin/activate" en Linux)
 - Instala las dependencias con "pip install -r requirements.txt"
 - Para ejecutar el juego, escriba en la terminal python3 main.py
+NOTA: Para poder ejecutar correctamente el juego en linux, necesita instalar primero "ffmpeg" para poder decodificar los archivos mp3 correctamente
+  - sudo apt-get install ffmpeg
 
 Controles del juego:
 
