@@ -18,7 +18,7 @@ class VistaControles(arcade.View):
         self.lista_tablon = arcade.SpriteList()
 
         self.boton_atras = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "nivel" / "flecha_atras_menu.png"), scale = 1.8)
-        self.tablon = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "controles"/ "tablon_controles.png"), scale = 0.5)
+        self.tablon = arcade.Sprite(str(BASE_DIR / "assets" / "images" / "menu" / "controles"/ "panel_controles_menu.png"), scale = 0.5)
 
         self.lista_botones.append(self.boton_atras)
         self.lista_tablon.append(self.tablon)
