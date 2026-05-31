@@ -53,6 +53,9 @@ Enemigo a distancia. Patrulla su plataforma hasta que detecta al jugador dentro 
 MOVIMIENTO Y FÍSICAS
 El personaje se desplaza horizontalmente y puede saltar. La gravedad se aplica de forma constante tanto al jugador como a los enemigos. El juego incluye plataformas móviles con las que el motor gestiona las colisiones automáticamente.
 
+SALTO EXPLOSIVO
+Es posible alcanzar un mayor rango de salto con el uso del disparo secundario, dicho salto es calculado en base al angulo de impacto respecto del jugador. Esta mecánica resulta util en algunos casos, en los que solamente se puede acceder de esta forma.
+
 SISTEMA DE COMBATE
 El jugador dispone de dos tipos de disparo:
 - Disparo principal: Proyectil rápido de daño directo que inflige 25 puntos de daño. Tiene animación de impacto al colisionar con enemigos o superficies.
@@ -63,6 +66,9 @@ Ciertos bloques del escenario tienen puntos de vida y pueden ser destruidos por 
 
 SISTEMA DE PUNTUACIÓN
 El jugador acumula puntos al eliminar enemigos (150 puntos por enemigo) y al destruir bloques destructibles (50 puntos por bloque).
+
+RECOGIDA DE PIEZAS
+Es indispensable la recogida de una sola pieza por mapa para completar este, de lo contrario el personaje no podrá atravesar el portal y por tanto completar el mapa.
 
 ### 2.4 Diseño de la interfaz y menús
 
@@ -127,6 +133,20 @@ El juego utiliza dos cámaras simultáneas para separar el mundo del juego de la
 - **`self.camera`:** Cámara del mundo de juego. Sigue al jugador horizontalmente con límites en los bordes del mapa: no se desplaza si el jugador está en el primer o último tramo del nivel, evitando que se vea fuera del mapa.
 - **`self.gui_camera`:** Cámara fija para la interfaz. Se usa para dibujar la puntuación, el indicador de carga del disparo secundario y los elementos de la pausa siempre en la misma posición de pantalla, independientemente de dónde esté la cámara del mundo.
 
+### 5. Detalles técnicos
+
+### 5.1 Algoritmo de activación de enemigos
+
+Para evitar la saturación del procesador al gestionar mapas con multiples entidades simultáneas, se ha implementado un algoritmo de optimización de rendimiento basado en la proximidad. El bucle de actualización del juego recorre la lista completa de enemigos en cada fotograma y calcula la distancia exacta respecto del jugador, si la distancia resultante es superior a la distancia en píxeles establecida, el motor suspende automáticamente la ejecución de la "máquina de estados" de la IA del enemigo y detiene la comprobación de sus colisiones con el entorno. Las entidades permanecen congeladas en memoria hasta que el jugador entra en su radio de activación, reduciendo el consumo de CPU.
+
+### 5.2 Sistema de gestión de colisiones 
+El motor físico de Artemis 67 procesa las colisiones de manera segmentada para optimizar el rendimiento y permitir interacciones diferenciadas con el entorno. Al cargar el mapa en formato .tmj, el código no genera una única malla de colisión, sino que separa los elementos en SpriteList independientes según las capas de diseño:
+
+Capa de Paredes y Plataformas: Alimenta el motor de físicas principal, permitiendo tanto al personaje como a los enemigos caminar sobre plataformas, bajar y subirlas, en definitiva , seguir un movimiento real evitando traspasos de paredes o que cualquier elemento pueda salirse del mapa por ejemplo.
+
+Capa de Elementos de Daño: Ejecuta un bucle secundario que comprueba colisiones mediante la intersección de cajas alineadas. Si se detecta solapamiento con el jugador, salta inmediatamente al GameOver por muerte.
+
+Capa de Bloques Destructibles: Al impactar un proyectil de la lista DisparoPrincipal o DisparoSecundario, el algoritmo calcula el identificador del tile colisionado, resta puntos de durabilidad a dicho bloque y, al llegar a cero, elimina el sprite de la capa y actualiza el sistema de puntuación sumando 50 puntos de forma reactiva.
 
 ## Conclusiones
 

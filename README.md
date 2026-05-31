@@ -13,7 +13,7 @@ John Michael Crossley Díaz
 Para ejecutar el juego:
 
 - Se tiene que tener Python 3 instalado
-- Se debe instalar la libreria Arcade en la terminal con: pip install arcade o python3 -m pip install arcade
+- Se debe instalar la libreria Arcade en la terminal con: pip install arcade o python3 -m pip install arcade, la versión utilizada es 3.3.3.
 - Se debe entrar a la carpeta src escribiendo en la terminal cd src
 - Para ejecutar el juego, escriba en la terminal python main.py
 
@@ -24,8 +24,9 @@ Controles del juego:
 - [Space] para saltar.
 - [LMB] o 'J' para disparar.
 - [RMB] o 'K' para disparar un proyectil explosivo. Se vera un rayo amarillo en la esquina de abajo del juego que indicara si la bomba esta lista. Si se encuentra en rojo, estará en recarga (tiene 3 de enfriamiento). También, al disparar debajo de tus pies, se podra usar para impulsarse hacia arriba más de lo que haría un salto normal.
+- [Esc] el escape permite pausar el nivel o regresar al menú principal
 
-Si se necesita consultar otra vez, en el menú en la esquina superior derecha se puede presionar el icono del mando para ver las instruccióbes de nuevo.
+Si se necesita consultar otra vez, en el menú en la esquina superior derecha se puede presionar el icono del mando para ver las instrucciónes de nuevo.
 
 En el menú, se encontrarán cinco botones:
 - El botón "Jugar" se utiliza para entrar al nivel actual, se empieza en el nivel 1.
