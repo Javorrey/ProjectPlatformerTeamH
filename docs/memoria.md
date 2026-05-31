@@ -30,7 +30,7 @@ El objetivo principal de este proyecto ha sido desarrollar un videojuego de plat
 ### 2.1 Descripción de los niveles
 
 - Nivel 1 — Polo Sur de Marte: Primer nivel del juego, ambientado en las regiones heladas del polo sur marciano. Sirve como introducción a las mecánicas básicas de movimiento y combate.
-- Nivel 2 — Glaciar de Marte: Entorno de hielo y roca con plataformas de mayor dificultad. El jugador debe enfrentarse a los primeros enemigos en un terreno más exigente.
+- Nivel 2 — Glaciar de Marte: Entorno de hielo y roca con plataformas de mayor dificultad. El jugador debe enfrentarse a los enemigos en un terreno más exigente.
 - Nivel 3 — Superficie de Marte: Ambientado en la árida superficie marciana bajo un cielo rojizo. Nivel de dificultad intermedia con mayor presencia de enemigos.
 - Nivel 4 — Caverna de Marte: Nivel subterráneo en el interior de una caverna marciana. La disposición cerrada de las plataformas aumenta la dificultad del combate.
 - Nivel 5 — Volcanes de Marte: Nivel final ambientado en una zona volcánica activa. Es el nivel más exigente del juego, con mayor densidad de enemigos y elementos de daño en el entorno.
@@ -54,7 +54,7 @@ MOVIMIENTO Y FÍSICAS
 El personaje se desplaza horizontalmente y puede saltar. La gravedad se aplica de forma constante tanto al jugador como a los enemigos. El juego incluye plataformas móviles con las que el motor gestiona las colisiones automáticamente.
 
 SISTEMA DE COMBATE
-El jugador dispone de dos tipos de arma:
+El jugador dispone de dos tipos de disparo:
 - Disparo principal: Proyectil rápido de daño directo que inflige 25 puntos de daño. Tiene animación de impacto al colisionar con enemigos o superficies.
 - Disparo secundario (explosivo): Proyectil más lento que al impactar genera una explosión en área con un radio de 150 píxeles, infligiendo 50 puntos de daño a todos los enemigos dentro del radio. Si el jugador abunta hacia abajo y dispara, recibe un impulso de empuje vertical (rocket jump) que le permite alcanzar zonas elevadas.
 
@@ -88,7 +88,7 @@ Los cinco niveles del juego han sido diseñados íntegramente por el equipo util
 
 ### 3.3 Música y Efectos de Sonido
 
-La música del juego ha sido elegida por el equipo de desarrollo. Se utilizan dos pistas diferenciadas: una para los menús ("Mythical Axiom") y otra para el juego ("Phase Shift"), ambas reproducidas en bucle. Los efectos de sonido (salto, disparo, impacto y game over) se gestionan mediante los recursos integrados de la librería Arcade.
+La música del juego ha sido elegida por el equipo de desarrollo. Se utilizan dos pistas diferenciadas: una para los menús ("Mythical Axiom") y otras 3 para los niveles ("Phase Shift", "Overflowing Core" y "Virus"), todas reproducidas en bucle. Los efectos de sonido (salto, disparo, impacto y game over) se gestionan mediante los recursos integrados de la librería Arcade.
 
 ### 3.4 Tipografía
 
