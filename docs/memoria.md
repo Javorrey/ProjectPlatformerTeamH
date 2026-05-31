@@ -166,3 +166,10 @@ MUSICA
 "Overflowing Core" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX [Overflowing Core Youtube link](https://www.youtube.com/watch?v=2EkUtLTGgVk)<br>
 "Virus" - Part of “Honkai: Star Rail - Allegory of the Cave (Part 3)” Original Game Soundtrack · Author: HOYO-MIX ℗ 2025 HOYO-MiX
 [Virus Youtube link](https://www.youtube.com/watch?v=bc49K0Rn3nQ)</p>
+
+## Anexo II
+GUIA PARA ACCEDER A LOS NIVELES SIN PASAR POR LOS ANTERIORES 
+1. Busca el fichero savegame.json en el directorio principal
+2. En la segunda línea en el campo ("nivel_desbloqueado": X) poner el nivel al que se desea acceder (1-5)
+3. Ejecutar el juego y darle a "Jugar" 
+

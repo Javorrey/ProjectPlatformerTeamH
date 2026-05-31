@@ -377,10 +377,10 @@ class GameView(arcade.View):
         offcenter_x_factor = 0
         offcenter_y_factor = 0
         if self.player_sprite.facing_direction == RIGHT_FACING:
-            offcenter_x_factor = -12
+            offcenter_x_factor = -20
             offcenter_y_factor = -5
         elif self.player_sprite.facing_direction == LEFT_FACING:
-            offcenter_x_factor = 32
+            offcenter_x_factor = 30
             offcenter_y_factor = 5
 
         # ---------------- LOGICA DE DISPARO NORMAL ----------------
